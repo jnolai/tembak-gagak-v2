@@ -1,0 +1,516 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2299.77">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="ms"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="apple-mobile-web-app-capable" content="yes" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="theme-color" content="#020617" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Jabatan Challenge — Ops Tembak Gagak&lt;/title&gt;</p>
+<p class="p2"><span class="Apple-converted-space">  </span></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html, body {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>touch-action: manipulation;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>-webkit-touch-callout: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>-webkit-user-select: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>user-select: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>overscroll-behavior-y: none;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.cursor-crosshair-custom {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: crosshair;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@keyframes flapWing {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>0%, 100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>50% { transform: translate(-50%, -55%) rotate(-8deg) scale(1.08); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.crow-flying {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>animation: flapWing 0.4s infinite ease-in-out;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.crow-fast {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>animation: flapWing 0.2s infinite ease-in-out !important;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@keyframes floatUp {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>0% { opacity: 1; transform: translateY(0) scale(1); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>100% { opacity: 0; transform: translateY(-30px) scale(1.2); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.hit-popup {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>animation: floatUp 0.5s ease-out forwards;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>pointer-events: none;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@keyframes arenaShake {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>0%, 100% { transform: translate(0, 0); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>20%, 60% { transform: translate(-4px, 2px); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>40%, 80% { transform: translate(4px, -2px); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.shake-danger {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>animation: arenaShake 0.25s ease-in-out;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-color: rgb(239 68 68) !important;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="bg-slate-950 text-slate-100 min-h-[100dvh] flex flex-col items-center justify-between p-2 sm:p-4 font-sans safe-area-inset"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Header --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;header class="w-full max-w-xl text-center pt-1 pb-2 shrink-0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1 class="text-xl sm:text-2xl md:text-3xl font-black tracking-wider text-amber-400 drop-shadow"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>JABATAN CHALLENGE 🎯</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="text-[11px] sm:text-xs text-slate-400 font-medium"&gt;Ops Kawalan Gagak • Awas Merpati (-10 pts)!&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Panel Dashboard --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;section class="w-full max-w-xl bg-slate-900/90 border border-slate-800 rounded-2xl p-2.5 sm:p-3 mb-2 flex items-center justify-around shadow-lg shrink-0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="text-center min-w-[70px]"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="text-[10px] sm:text-xs uppercase tracking-widest text-slate-400 font-bold block"&gt;Masa&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;span id="timerText" class="text-xl sm:text-2xl md:text-3xl font-black text-rose-400 font-mono transition-all"&gt;30s&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="h-7 w-px bg-slate-800"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="text-center min-w-[70px]"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="text-[10px] sm:text-xs uppercase tracking-widest text-slate-400 font-bold block"&gt;Skor&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;span id="scoreText" class="text-xl sm:text-2xl md:text-3xl font-black text-amber-400 font-mono"&gt;0&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="h-7 w-px bg-slate-800"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="text-center min-w-[70px]"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="text-[10px] sm:text-xs uppercase tracking-widest text-slate-400 font-bold block"&gt;No. 1 Sheet&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;span id="topScoreText" class="text-xl sm:text-2xl md:text-3xl font-black text-emerald-400 font-mono"&gt;0&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Arena Permainan --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;main id="gameArena" class="w-full max-w-xl flex-1 min-h-[250px] max-h-[50dvh] bg-gradient-to-b from-slate-900 via-indigo-950/70 to-slate-900 rounded-2xl sm:rounded-3xl border border-slate-800 relative overflow-hidden shadow-inner cursor-crosshair-custom touch-none transition-colors duration-150"&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Sasaran Gagak (Skor +) --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button id="crowBtn" class="absolute hidden text-4xl sm:text-5xl transition-all duration-75 active:scale-75 focus:outline-none crow-flying select-none z-10" aria-label="Gagak"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>🐦‍⬛</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/button&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Sasaran Perangkap: Burung Merpati / Bom (Skor -) --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button id="trapBtn" class="absolute hidden text-4xl sm:text-5xl transition-all duration-75 active:scale-75 focus:outline-none crow-flying select-none z-10" aria-label="Burung Larangan"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>🕊️</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/button&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Amaran Pecutan 10 Saat Terakhir --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="frenzyBadge" class="absolute top-2 left-1/2 -translate-x-1/2 bg-rose-600/90 border border-rose-400 text-white font-black text-[10px] sm:text-xs px-3 py-0.5 rounded-full uppercase tracking-wider hidden animate-pulse shadow-lg z-10 whitespace-nowrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>⚠️ KECEMASAN: 10S TERAKHIR!</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Skrin Mula --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="startScreen" class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-6 text-center z-20"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="flex gap-2 text-5xl sm:text-6xl mb-2 animate-bounce"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span&gt;🐦‍⬛&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="opacity-60 text-4xl"&gt;🕊️&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2 class="text-lg sm:text-2xl font-black text-white mb-2"&gt;Ops Kawalan Gagak!&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="text-xs sm:text-sm text-slate-300 max-w-xs mb-5 leading-relaxed"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>Tembak &lt;span class="text-amber-400 font-bold"&gt;Gagak 🐦‍⬛ (+10)&lt;/span&gt;.&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="text-rose-400 font-bold"&gt;JANGAN tembak Merpati 🕊️ (-10)!&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button id="startGameBtn" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-black py-2.5 px-7 sm:py-3 sm:px-8 rounded-xl shadow-lg transform active:scale-95 transition text-sm sm:text-base"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>MULA OPS (30s)</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Skrin Tamat --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="gameOverScreen" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md hidden flex flex-col items-center justify-center p-4 sm:p-6 text-center z-30"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="text-rose-500 font-black text-2xl sm:text-3xl mb-1 tracking-wider"&gt;OPS TAMAT!&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="text-xs sm:text-sm text-slate-400 mb-3"&gt;Rekod markah anda terus ke Google Sheet.&lt;/p&gt;</p>
+<p class="p2"><span class="Apple-converted-space">      </span></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-2 sm:py-3 mb-4 w-full max-w-xs"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="text-[10px] sm:text-xs uppercase text-slate-400 font-bold block"&gt;Markah Akhir&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="finalScoreVal" class="text-3xl sm:text-4xl font-black text-amber-400 font-mono"&gt;0&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="w-full max-w-xs space-y-2 mb-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="flex gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;input id="playerNameInput" type="text" maxlength="16" placeholder="Nama Pemain..." class="bg-slate-800 border border-slate-700 text-xs sm:text-sm rounded-xl px-3 py-2.5 sm:py-3 flex-1 text-center font-bold focus:outline-none focus:border-amber-400 text-slate-100 placeholder-slate-500" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;button id="saveScoreBtn" class="bg-emerald-500 hover:bg-emerald-400 disabled:bg-slate-700 text-slate-950 font-bold px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl transition shadow text-xs sm:text-sm flex items-center justify-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span id="saveBtnText"&gt;Simpan&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p id="saveStatusMsg" class="text-[10px] text-slate-400 min-h-[14px] font-semibold"&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button id="playAgainBtn" class="text-[11px] uppercase font-bold text-slate-400 hover:text-white underline underline-offset-4 mt-1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>Main Semula Tanpa Simpan</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Papan 10 Pemain Terbaik --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;section class="w-full max-w-xl bg-slate-900/80 border border-slate-800 rounded-2xl p-3 mt-2 shadow-md shrink-0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="flex justify-between items-center mb-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="flex items-center gap-1.5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="text-sm"&gt;🏆&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3 class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-slate-200"&gt;Top 10 Pemain Terbaik (Live)&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button id="refreshBoardBtn" class="text-[10px] sm:text-[11px] text-amber-400 hover:text-amber-300 transition flex items-center gap-1 font-semibold"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span&gt;🔄 Kemaskini&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="max-h-[140px] sm:max-h-[165px] overflow-y-auto pr-1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;ul id="leaderboardList" class="space-y-1.5 text-xs font-medium"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;li class="text-center text-slate-500 italic py-2"&gt;Menghubungkan ke Google Sheet...&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Footer --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;footer class="text-center py-2 text-[10px] text-slate-500 font-medium shrink-0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>© 2026 JABATAN CHALLENGE • Created by Jnol.Ai</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/footer&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9VUoJOr2g-kFlT03PsXrNiJGlzywiw3sZ8xvMPf7oNpDunSn460skGut4KUZVgOrSnA/exec";</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const CONFIG = {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>TOTAL_TIME: 30,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>POINTS_PER_HIT: 10,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>PENALTY_PER_HIT: 10,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>NORMAL_SPEED_MS: 800,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>FRENZY_SPEED_MS: 400</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let score = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let timeLeft = CONFIG.TOTAL_TIME;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let gameTimer = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let moveTimer = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let isPlaying = false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let currentSpeed = CONFIG.NORMAL_SPEED_MS;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const crowBtn = document.getElementById('crowBtn');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const trapBtn = document.getElementById('trapBtn');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const arena = document.getElementById('gameArena');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const frenzyBadge = document.getElementById('frenzyBadge');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const timerText = document.getElementById('timerText');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const scoreText = document.getElementById('scoreText');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const topScoreText = document.getElementById('topScoreText');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const startScreen = document.getElementById('startScreen');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const gameOverScreen = document.getElementById('gameOverScreen');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const finalScoreVal = document.getElementById('finalScoreVal');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const playerNameInput = document.getElementById('playerNameInput');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const saveScoreBtn = document.getElementById('saveScoreBtn');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const saveBtnText = document.getElementById('saveBtnText');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const saveStatusMsg = document.getElementById('saveStatusMsg');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const playAgainBtn = document.getElementById('playAgainBtn');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const startGameBtn = document.getElementById('startGameBtn');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const leaderboardList = document.getElementById('leaderboardList');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const refreshBoardBtn = document.getElementById('refreshBoardBtn');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let audioCtx = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function initAudio() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!audioCtx) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>audioCtx = new (window.AudioContext || window.webkitAudioContext)();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (audioCtx.state === 'suspended') {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>audioCtx.resume();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function playShotTone() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>initAudio();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const osc = audioCtx.createOscillator();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const gain = audioCtx.createGain();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>osc.type = 'sawtooth';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>osc.frequency.setValueAtTime(850, audioCtx.currentTime);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.08);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>gain.gain.setValueAtTime(0.25, audioCtx.currentTime);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>osc.connect(gain);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>gain.connect(audioCtx.destination);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>osc.start();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>osc.stop(audioCtx.currentTime + 0.08);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} catch (e) {}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function playPenaltyTone() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>initAudio();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const osc = audioCtx.createOscillator();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const gain = audioCtx.createGain();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>osc.type = 'square';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>osc.frequency.setValueAtTime(160, audioCtx.currentTime);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.18);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>gain.gain.setValueAtTime(0.3, audioCtx.currentTime);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.18);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>osc.connect(gain);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>gain.connect(audioCtx.destination);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>osc.start();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>osc.stop(audioCtx.currentTime + 0.18);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} catch (e) {}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>async function fetchTop10Leaderboard() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>leaderboardList.innerHTML = '&lt;li class="text-center text-slate-500 italic py-2"&gt;Mengambil senarai 10 terbaik...&lt;/li&gt;';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const response = await fetch(GOOGLE_SCRIPT_URL, {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>method: 'GET',</p>
+<p class="p1"><span class="Apple-converted-space">          </span>redirect: 'follow'</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (!response.ok) throw new Error('Respons rangkaian gagal');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const data = await response.json();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (!data || !data.length) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>leaderboardList.innerHTML = '&lt;li class="text-center text-slate-500 italic py-2"&gt;Belum ada pemain dalam Google Sheet.&lt;/li&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">          </span>topScoreText.textContent = '0';</p>
+<p class="p1"><span class="Apple-converted-space">          </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>topScoreText.textContent = data[0].score || 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const badges = ['🥇', '🥈', '🥉'];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>leaderboardList.innerHTML = data.slice(0, 10).map((item, idx) =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;li class="flex items-center justify-between bg-slate-950/80 px-2.5 py-1.5 rounded-lg border border-slate-800"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex items-center gap-2 truncate pr-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span class="w-4 text-center font-bold text-[10px] ${idx &lt; 3 ? '' : 'text-slate-500'}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>${badges[idx] || '#' + (idx + 1)}</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span class="text-slate-200 font-medium text-xs truncate"&gt;${escapeHtml(item.name)}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex items-center gap-2 shrink-0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span class="text-[9px] text-slate-500 hidden sm:inline"&gt;${item.time || ''}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span class="font-mono font-bold text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded text-xs border border-amber-400/20"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>${item.score} pts</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>`).join('');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>} catch (err) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>console.error("Ralat Leaderboard:", err);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>leaderboardList.innerHTML = '&lt;li class="text-center text-rose-400 py-2"&gt;Gagal berhubung dengan Google Sheet.&lt;/li&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>async function submitScoreToSheet() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const rawName = playerNameInput.value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const name = rawName.length &gt; 0 ? rawName : 'Pemain Anon';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>saveScoreBtn.disabled = true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>saveBtnText.textContent = "...";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>saveStatusMsg.textContent = "Menghantar ke Google Sheet Drive...";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>saveStatusMsg.className = "text-[10px] text-amber-400 font-semibold";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>await fetch(GOOGLE_SCRIPT_URL, {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>method: 'POST',</p>
+<p class="p1"><span class="Apple-converted-space">          </span>mode: 'no-cors',</p>
+<p class="p1"><span class="Apple-converted-space">          </span>headers: { 'Content-Type': 'text/plain;charset=utf-8' },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>body: JSON.stringify({ name: name, score: score })</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>saveStatusMsg.textContent = "Tersimpan dalam Google Sheet!";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>saveStatusMsg.className = "text-[10px] text-emerald-400 font-semibold";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>gameOverScreen.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">          </span>startScreen.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">          </span>saveScoreBtn.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>saveBtnText.textContent = "Simpan";</p>
+<p class="p1"><span class="Apple-converted-space">          </span>saveStatusMsg.textContent = "";</p>
+<p class="p1"><span class="Apple-converted-space">          </span>fetchTop10Leaderboard();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}, 1100);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>} catch (err) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>console.error("Ralat Simpan:", err);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>saveStatusMsg.textContent = "Ralat semasa menyimpan ke Sheet.";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>saveStatusMsg.className = "text-[10px] text-rose-400 font-semibold";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>saveScoreBtn.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>saveBtnText.textContent = "Simpan";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function escapeHtml(str) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return String(str).replace(/[&amp;&lt;&gt;"']/g, m =&gt; ({</p>
+<p class="p1"><span class="Apple-converted-space">        </span>'&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;'</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}[m]));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function getRandomPosition() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const arenaW = arena.clientWidth;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const arenaH = arena.clientHeight;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const padding = 36;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const maxX = arenaW - padding * 2;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const maxY = arenaH - padding * 2;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>return {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>x: Math.floor(Math.random() * Math.max(maxX, 10)) + padding,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>y: Math.floor(Math.random() * Math.max(maxY, 10)) + padding</p>
+<p class="p1"><span class="Apple-converted-space">      </span>};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function moveEntities() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!isPlaying) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const crowPos = getRandomPosition();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>crowBtn.style.left = `${crowPos.x}px`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>crowBtn.style.top = `${crowPos.y}px`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (Math.random() &lt; 0.65) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const trapPos = getRandomPosition();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>trapBtn.style.left = `${trapPos.x}px`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>trapBtn.style.top = `${trapPos.y}px`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>trapBtn.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>trapBtn.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function resetMoveTimer(speed) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>clearInterval(moveTimer);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>moveTimer = setInterval(moveEntities, speed);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function spawnHitPopup(x, y, text, isPenalty = false) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const popup = document.createElement('span');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>popup.className = `hit-popup absolute font-black font-mono text-base sm:text-lg drop-shadow z-20 ${</p>
+<p class="p1"><span class="Apple-converted-space">        </span>isPenalty ? 'text-rose-500 scale-125' : 'text-emerald-400'</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>popup.textContent = text;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>popup.style.left = `${x}px`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>popup.style.top = `${y}px`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>arena.appendChild(popup);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setTimeout(() =&gt; popup.remove(), 500);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function handleShot(e) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!isPlaying) return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>e.stopPropagation();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>playShotTone();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>score += CONFIG.POINTS_PER_HIT;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>scoreText.textContent = score;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const rect = arena.getBoundingClientRect();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const clientX = e.clientX || (e.touches &amp;&amp; e.touches[0].clientX) || 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const clientY = e.clientY || (e.touches &amp;&amp; e.touches[0].clientY) || 0;</p>
+<p class="p2"><span class="Apple-converted-space">      </span></p>
+<p class="p1"><span class="Apple-converted-space">      </span>spawnHitPopup(clientX - rect.left, clientY - rect.top, `+${CONFIG.POINTS_PER_HIT}`);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>moveEntities();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>resetMoveTimer(currentSpeed);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function handleTrapShot(e) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!isPlaying) return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>e.stopPropagation();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>playPenaltyTone();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>score = Math.max(0, score - CONFIG.PENALTY_PER_HIT);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>scoreText.textContent = score;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>arena.classList.add('shake-danger');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setTimeout(() =&gt; arena.classList.remove('shake-danger'), 250);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const rect = arena.getBoundingClientRect();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const clientX = e.clientX || (e.touches &amp;&amp; e.touches[0].clientX) || 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const clientY = e.clientY || (e.touches &amp;&amp; e.touches[0].clientY) || 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>spawnHitPopup(clientX - rect.left, clientY - rect.top, `-${CONFIG.PENALTY_PER_HIT} 💥`, true);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>trapBtn.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>moveEntities();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>resetMoveTimer(currentSpeed);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function startGame() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>initAudio();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>score = 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>timeLeft = CONFIG.TOTAL_TIME;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>currentSpeed = CONFIG.NORMAL_SPEED_MS;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>isPlaying = true;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>scoreText.textContent = '0';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>timerText.textContent = `${timeLeft}s`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>timerText.className = "text-xl sm:text-2xl md:text-3xl font-black text-rose-400 font-mono transition-all";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>saveStatusMsg.textContent = '';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>frenzyBadge.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>crowBtn.classList.remove('crow-fast');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>trapBtn.classList.remove('crow-fast');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>startScreen.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gameOverScreen.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>crowBtn.classList.remove('hidden');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>moveEntities();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>resetMoveTimer(currentSpeed);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>gameTimer = setInterval(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>timeLeft--;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>timerText.textContent = `${timeLeft}s`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (timeLeft &lt;= 10 &amp;&amp; currentSpeed !== CONFIG.FRENZY_SPEED_MS) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>currentSpeed = CONFIG.FRENZY_SPEED_MS;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>resetMoveTimer(currentSpeed);</p>
+<p class="p2"><span class="Apple-converted-space">          </span></p>
+<p class="p1"><span class="Apple-converted-space">          </span>frenzyBadge.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">          </span>crowBtn.classList.add('crow-fast');</p>
+<p class="p1"><span class="Apple-converted-space">          </span>trapBtn.classList.add('crow-fast');</p>
+<p class="p1"><span class="Apple-converted-space">          </span>timerText.className = "text-2xl sm:text-3xl md:text-4xl font-black text-rose-500 font-mono animate-ping transition-all";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (timeLeft &lt;= 0) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>endGame();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}, 1000);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function endGame() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>isPlaying = false;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>clearInterval(gameTimer);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>clearInterval(moveTimer);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>frenzyBadge.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>crowBtn.classList.remove('crow-fast');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>trapBtn.classList.remove('crow-fast');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>crowBtn.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>trapBtn.classList.add('hidden');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>finalScoreVal.textContent = score;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gameOverScreen.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>playerNameInput.value = '';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setTimeout(() =&gt; playerNameInput.focus(), 200);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>crowBtn.addEventListener('pointerdown', handleShot);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>trapBtn.addEventListener('pointerdown', handleTrapShot);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>startGameBtn.addEventListener('click', startGame);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>playAgainBtn.addEventListener('click', startGame);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>saveScoreBtn.addEventListener('click', submitScoreToSheet);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>refreshBoardBtn.addEventListener('click', fetchTop10Leaderboard);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>playerNameInput.addEventListener('keydown', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (e.key === 'Enter') submitScoreToSheet();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>arena.addEventListener('pointerdown', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (e.target === arena) initAudio();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>fetchTop10Leaderboard();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
