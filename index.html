@@ -47,7 +47,7 @@
     <h1 class="text-xl sm:text-2xl md:text-3xl font-black tracking-wider text-amber-400 drop-shadow">
       JABATAN CHALLENGE 🎯
     </h1>
-    <p class="text-[11px] sm:text-xs text-slate-400 font-medium">Ops Kawalan Gagak • 30s Papan Skor Drive</p>
+    <p class="text-[11px] sm:text-xs text-slate-400 font-medium">Ops Kawalan Gagak • 30s Papan Skor Terpusat</p>
   </header>
 
   <!-- Panel Dashboard -->
@@ -63,7 +63,7 @@
     </div>
     <div class="h-7 w-px bg-slate-800"></div>
     <div class="text-center min-w-[70px]">
-      <span class="text-[10px] sm:text-xs uppercase tracking-widest text-slate-400 font-bold block">No. 1 Sheet</span>
+      <span class="text-[10px] sm:text-xs uppercase tracking-widest text-slate-400 font-bold block">No. 1 Sistem</span>
       <span id="topScoreText" class="text-xl sm:text-2xl md:text-3xl font-black text-emerald-400 font-mono">0</span>
     </div>
   </section>
@@ -106,7 +106,7 @@
     <!-- Skrin Tamat -->
     <div id="gameOverScreen" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md hidden flex flex-col items-center justify-center p-4 sm:p-6 text-center z-30">
       <span class="text-rose-500 font-black text-2xl sm:text-3xl mb-1 tracking-wider">OPS TAMAT!</span>
-      <p class="text-xs sm:text-sm text-slate-400 mb-3">Rekod markah anda terus ke Google Sheet.</p>
+      <p class="text-xs sm:text-sm text-slate-400 mb-3">Rekod markah anda terus ke pangkalan data utama.</p>
       
       <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-2 sm:py-3 mb-4 w-full max-w-xs">
         <span class="text-[10px] sm:text-xs uppercase text-slate-400 font-bold block">Markah Akhir</span>
@@ -143,7 +143,7 @@
 
     <div class="max-h-[140px] sm:max-h-[165px] overflow-y-auto pr-1">
       <ul id="leaderboardList" class="space-y-1.5 text-xs font-medium">
-        <li class="text-center text-slate-500 italic py-2">Menghubungkan ke Google Sheet...</li>
+        <li class="text-center text-slate-500 italic py-2">Menghubungkan ke pelayan rekod...</li>
       </ul>
     </div>
   </section>
@@ -166,11 +166,10 @@
       }
     };
 
-    // Pilihan pasangan sasaran serentak
     const PAIR_PRESETS = [
-      [CONFIG.TARGET_TYPES.BIRD, CONFIG.TARGET_TYPES.CROW], // Burung Dilindungi + Gagak
-      [CONFIG.TARGET_TYPES.BIRD, CONFIG.TARGET_TYPES.BOMB], // Burung Dilindungi + Bom
-      [CONFIG.TARGET_TYPES.BOMB, CONFIG.TARGET_TYPES.CROW]  // Bom + Gagak
+      [CONFIG.TARGET_TYPES.BIRD, CONFIG.TARGET_TYPES.CROW],
+      [CONFIG.TARGET_TYPES.BIRD, CONFIG.TARGET_TYPES.BOMB],
+      [CONFIG.TARGET_TYPES.BOMB, CONFIG.TARGET_TYPES.CROW]
     ];
 
     let score = 0;
@@ -266,7 +265,7 @@
         const data = await response.json();
 
         if (!data || !data.length) {
-          leaderboardList.innerHTML = '<li class="text-center text-slate-500 italic py-2">Belum ada pemain dalam Google Sheet.</li>';
+          leaderboardList.innerHTML = '<li class="text-center text-slate-500 italic py-2">Belum ada rekod pemain dalam pangkalan data.</li>';
           topScoreText.textContent = '0';
           return;
         }
@@ -293,7 +292,7 @@
 
       } catch (err) {
         console.error("Ralat Leaderboard:", err);
-        leaderboardList.innerHTML = '<li class="text-center text-rose-400 py-2">Gagal berhubung dengan Google Sheet.</li>';
+        leaderboardList.innerHTML = '<li class="text-center text-rose-400 py-2">Gagal berhubung dengan pangkalan data rekod.</li>';
       }
     }
 
@@ -303,7 +302,7 @@
 
       saveScoreBtn.disabled = true;
       saveBtnText.textContent = "...";
-      saveStatusMsg.textContent = "Menghantar ke Google Sheet Drive...";
+      saveStatusMsg.textContent = "Menghantar markah ke sistem pusat...";
       saveStatusMsg.className = "text-[10px] text-amber-400 font-semibold";
 
       try {
@@ -314,7 +313,7 @@
           body: JSON.stringify({ name: name, score: score })
         });
 
-        saveStatusMsg.textContent = "Tersimpan dalam Google Sheet!";
+        saveStatusMsg.textContent = "Tersimpan dalam sistem rekod!";
         saveStatusMsg.className = "text-[10px] text-emerald-400 font-semibold";
 
         setTimeout(() => {
@@ -328,7 +327,7 @@
 
       } catch (err) {
         console.error("Ralat Simpan:", err);
-        saveStatusMsg.textContent = "Ralat semasa menyimpan ke Sheet.";
+        saveStatusMsg.textContent = "Ralat semasa menyimpan markah.";
         saveStatusMsg.className = "text-[10px] text-rose-400 font-semibold";
         saveScoreBtn.disabled = false;
         saveBtnText.textContent = "Simpan";
@@ -362,10 +361,8 @@
     function moveTargets() {
       if (!isPlaying) return;
 
-      // Pilih salah satu pasangan secara rawak
       const selectedPair = PAIR_PRESETS[Math.floor(Math.random() * PAIR_PRESETS.length)];
       
-      // Tukar kedudukan secara rawak (siapa sasaran 1 atau 2)
       if (Math.random() > 0.5) {
         slot1Data = selectedPair[0];
         slot2Data = selectedPair[1];
@@ -383,7 +380,7 @@
       const arenaW = arena.clientWidth;
       const arenaH = arena.clientHeight;
       const padding = 38;
-      const minDistance = 75; // Elak bertindih
+      const minDistance = 75;
 
       const coords = getRandomPositions(arenaW, arenaH, padding, minDistance);
 
@@ -432,7 +429,6 @@
       const clickY = clientY - rect.top;
       spawnHitPopup(clickX, clickY, targetData.points, targetData.color);
 
-      // Gerakkan semula kedua-dua sasaran
       moveTargets();
       resetMoveTimer(currentSpeed);
     }
