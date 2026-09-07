@@ -71,9 +71,14 @@
   <!-- Arena Permainan -->
   <main id="gameArena" class="w-full max-w-xl flex-1 min-h-[250px] max-h-[50dvh] bg-gradient-to-b from-slate-900 via-indigo-950/70 to-slate-900 rounded-2xl sm:rounded-3xl border border-slate-800 relative overflow-hidden shadow-inner cursor-crosshair-custom touch-none">
     
-    <!-- Sasaran Dinamik (Gagak / Burung Lain / Bom) -->
-    <button id="targetBtn" class="absolute hidden text-4xl sm:text-5xl transition-all duration-75 active:scale-75 focus:outline-none target-flying select-none" aria-label="Sasaran">
+    <!-- Sasaran 1 -->
+    <button id="targetBtn1" class="absolute hidden text-4xl sm:text-5xl transition-all duration-75 active:scale-75 focus:outline-none target-flying select-none" aria-label="Sasaran 1">
       🐦‍⬛
+    </button>
+
+    <!-- Sasaran 2 -->
+    <button id="targetBtn2" class="absolute hidden text-4xl sm:text-5xl transition-all duration-75 active:scale-75 focus:outline-none target-flying select-none" aria-label="Sasaran 2">
+      🕊️
     </button>
 
     <!-- Amaran Pecutan 10 Saat Terakhir -->
@@ -83,12 +88,15 @@
 
     <!-- Skrin Mula -->
     <div id="startScreen" class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-6 text-center z-20">
-      <div class="text-5xl sm:text-6xl mb-2 animate-bounce">🐦‍⬛</div>
-      <h2 class="text-lg sm:text-2xl font-black text-white mb-2">Ops Kawalan Gagak!</h2>
-      <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 mb-4 text-xs text-slate-300 max-w-xs space-y-1 text-left">
+      <div class="flex gap-2 text-5xl sm:text-6xl mb-2 animate-bounce">
+        <span>🐦‍⬛</span><span>🕊️</span><span>💣</span>
+      </div>
+      <h2 class="text-lg sm:text-2xl font-black text-white mb-2">Ops Kawalan Gagak: Sasaran Berkembar!</h2>
+      <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 mb-4 text-xs text-slate-300 max-w-xs space-y-1.5 text-left">
         <p class="flex items-center justify-between"><span>🐦‍⬛ Gagak Bandar:</span> <span class="font-bold text-emerald-400">+10 Pts</span></p>
         <p class="flex items-center justify-between"><span>🕊️ Merpati Dilindungi:</span> <span class="font-bold text-rose-400">-10 Pts</span></p>
         <p class="flex items-center justify-between"><span>💣 Bahan Letupan:</span> <span class="font-bold text-rose-500">-15 Pts</span></p>
+        <p class="text-[10px] text-slate-400 pt-1 border-t border-slate-800 italic">*2 sasaran muncul serentak secara berpasangan.</p>
       </div>
       <button id="startGameBtn" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-black py-2.5 px-7 sm:py-3 sm:px-8 rounded-xl shadow-lg transform active:scale-95 transition text-sm sm:text-base">
         MULA OPS (30s)
@@ -146,17 +154,24 @@
   </footer>
 
   <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9VUoJOr2g-kFlT03PsXrNiJGlzywiw3sZ8xvMPf7oNpDunSn460skGut4KUZVgOrSnA/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPtVrKnBwS1gQ1NRo18Ok4Eh6_Mejstgz_ujX8nVZCio4Rd-totXe2ajCVT3r5rJpf/exec";
     const CONFIG = {
       TOTAL_TIME: 30,
-      NORMAL_SPEED_MS: 800,
-      FRENZY_SPEED_MS: 400,
+      NORMAL_SPEED_MS: 900,
+      FRENZY_SPEED_MS: 500,
       TARGET_TYPES: {
-        CROW: { emoji: '🐦‍⬛', points: 10, color: 'text-emerald-400' },
-        BIRD: { emoji: '🕊️', points: -10, color: 'text-rose-400' },
-        BOMB: { emoji: '💣', points: -15, color: 'text-rose-600' }
+        CROW: { key: 'CROW', emoji: '🐦‍⬛', points: 10, color: 'text-emerald-400' },
+        BIRD: { key: 'BIRD', emoji: '🕊️', points: -10, color: 'text-rose-400' },
+        BOMB: { key: 'BOMB', emoji: '💣', points: -15, color: 'text-rose-600' }
       }
     };
+
+    // Pilihan pasangan sasaran serentak
+    const PAIR_PRESETS = [
+      [CONFIG.TARGET_TYPES.BIRD, CONFIG.TARGET_TYPES.CROW], // Burung Dilindungi + Gagak
+      [CONFIG.TARGET_TYPES.BIRD, CONFIG.TARGET_TYPES.BOMB], // Burung Dilindungi + Bom
+      [CONFIG.TARGET_TYPES.BOMB, CONFIG.TARGET_TYPES.CROW]  // Bom + Gagak
+    ];
 
     let score = 0;
     let timeLeft = CONFIG.TOTAL_TIME;
@@ -164,9 +179,12 @@
     let moveTimer = null;
     let isPlaying = false;
     let currentSpeed = CONFIG.NORMAL_SPEED_MS;
-    let currentTarget = CONFIG.TARGET_TYPES.CROW;
 
-    const targetBtn = document.getElementById('targetBtn');
+    let slot1Data = null;
+    let slot2Data = null;
+
+    const targetBtn1 = document.getElementById('targetBtn1');
+    const targetBtn2 = document.getElementById('targetBtn2');
     const arena = document.getElementById('gameArena');
     const frenzyBadge = document.getElementById('frenzyBadge');
     const timerText = document.getElementById('timerText');
@@ -194,14 +212,14 @@
       }
     }
 
-    function playTone(type) {
+    function playTone(typeKey) {
       try {
         initAudio();
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         const now = audioCtx.currentTime;
 
-        if (type === 'CROW') {
+        if (typeKey === 'CROW') {
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(850, now);
           osc.frequency.exponentialRampToValueAtTime(120, now + 0.08);
@@ -211,20 +229,20 @@
           gain.connect(audioCtx.destination);
           osc.start();
           osc.stop(now + 0.08);
-        } else if (type === 'BIRD') {
+        } else if (typeKey === 'BIRD') {
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(300, now);
-          osc.frequency.linearRampToValueAtTime(150, now + 0.15);
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.linearRampToValueAtTime(160, now + 0.15);
           gain.gain.setValueAtTime(0.3, now);
           gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
           osc.start();
           osc.stop(now + 0.15);
-        } else if (type === 'BOMB') {
+        } else if (typeKey === 'BOMB') {
           osc.type = 'square';
-          osc.frequency.setValueAtTime(120, now);
-          osc.frequency.exponentialRampToValueAtTime(40, now + 0.25);
+          osc.frequency.setValueAtTime(130, now);
+          osc.frequency.exponentialRampToValueAtTime(35, now + 0.25);
           gain.gain.setValueAtTime(0.4, now);
           gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
           osc.connect(gain);
@@ -323,38 +341,62 @@
       }[m]));
     }
 
-    function moveTarget() {
-      if (!isPlaying) return;
-
-      // Peluang rawak kemunculan: 65% Gagak, 20% Burung Lain, 15% Bom
-      const rand = Math.random();
-      if (rand < 0.65) {
-        currentTarget = { ...CONFIG.TARGET_TYPES.CROW, typeKey: 'CROW' };
-      } else if (rand < 0.85) {
-        currentTarget = { ...CONFIG.TARGET_TYPES.BIRD, typeKey: 'BIRD' };
-      } else {
-        currentTarget = { ...CONFIG.TARGET_TYPES.BOMB, typeKey: 'BOMB' };
-      }
-
-      targetBtn.textContent = currentTarget.emoji;
-
-      const arenaW = arena.clientWidth;
-      const arenaH = arena.clientHeight;
-      const padding = 36;
-
+    function getRandomPositions(arenaW, arenaH, padding, minDistance) {
       const maxX = arenaW - padding * 2;
       const maxY = arenaH - padding * 2;
 
-      const randomX = Math.floor(Math.random() * Math.max(maxX, 10)) + padding;
-      const randomY = Math.floor(Math.random() * Math.max(maxY, 10)) + padding;
+      let x1 = Math.floor(Math.random() * Math.max(maxX, 10)) + padding;
+      let y1 = Math.floor(Math.random() * Math.max(maxY, 10)) + padding;
 
-      targetBtn.style.left = `${randomX}px`;
-      targetBtn.style.top = `${randomY}px`;
+      let x2, y2, dist = 0, attempts = 0;
+      do {
+        x2 = Math.floor(Math.random() * Math.max(maxX, 10)) + padding;
+        y2 = Math.floor(Math.random() * Math.max(maxY, 10)) + padding;
+        dist = Math.hypot(x2 - x1, y2 - y1);
+        attempts++;
+      } while (dist < minDistance && attempts < 15);
+
+      return { x1, y1, x2, y2 };
+    }
+
+    function moveTargets() {
+      if (!isPlaying) return;
+
+      // Pilih salah satu pasangan secara rawak
+      const selectedPair = PAIR_PRESETS[Math.floor(Math.random() * PAIR_PRESETS.length)];
+      
+      // Tukar kedudukan secara rawak (siapa sasaran 1 atau 2)
+      if (Math.random() > 0.5) {
+        slot1Data = selectedPair[0];
+        slot2Data = selectedPair[1];
+      } else {
+        slot1Data = selectedPair[1];
+        slot2Data = selectedPair[0];
+      }
+
+      targetBtn1.textContent = slot1Data.emoji;
+      targetBtn2.textContent = slot2Data.emoji;
+
+      targetBtn1.classList.remove('hidden');
+      targetBtn2.classList.remove('hidden');
+
+      const arenaW = arena.clientWidth;
+      const arenaH = arena.clientHeight;
+      const padding = 38;
+      const minDistance = 75; // Elak bertindih
+
+      const coords = getRandomPositions(arenaW, arenaH, padding, minDistance);
+
+      targetBtn1.style.left = `${coords.x1}px`;
+      targetBtn1.style.top = `${coords.y1}px`;
+
+      targetBtn2.style.left = `${coords.x2}px`;
+      targetBtn2.style.top = `${coords.y2}px`;
     }
 
     function resetMoveTimer(speed) {
       clearInterval(moveTimer);
-      moveTimer = setInterval(moveTarget, speed);
+      moveTimer = setInterval(moveTargets, speed);
     }
 
     function spawnHitPopup(x, y, points, colorClass) {
@@ -368,15 +410,18 @@
       setTimeout(() => popup.remove(), 500);
     }
 
-    function handleShot(e) {
+    function handleShot(slotIndex, e) {
       if (!isPlaying) return;
       e.preventDefault();
       e.stopPropagation();
 
-      playTone(currentTarget.typeKey);
+      const targetData = slotIndex === 1 ? slot1Data : slot2Data;
+      if (!targetData) return;
 
-      score += currentTarget.points;
-      if (score < 0) score = 0; // Elak markah menjadi negatif
+      playTone(targetData.key);
+
+      score += targetData.points;
+      if (score < 0) score = 0;
       scoreText.textContent = score;
 
       const rect = arena.getBoundingClientRect();
@@ -385,9 +430,10 @@
       
       const clickX = clientX - rect.left;
       const clickY = clientY - rect.top;
-      spawnHitPopup(clickX, clickY, currentTarget.points, currentTarget.color);
+      spawnHitPopup(clickX, clickY, targetData.points, targetData.color);
 
-      moveTarget();
+      // Gerakkan semula kedua-dua sasaran
+      moveTargets();
       resetMoveTimer(currentSpeed);
     }
 
@@ -403,13 +449,13 @@
       timerText.className = "text-xl sm:text-2xl md:text-3xl font-black text-rose-400 font-mono transition-all";
       saveStatusMsg.textContent = '';
       frenzyBadge.classList.add('hidden');
-      targetBtn.classList.remove('target-fast');
+      targetBtn1.classList.remove('target-fast');
+      targetBtn2.classList.remove('target-fast');
 
       startScreen.classList.add('hidden');
       gameOverScreen.classList.add('hidden');
-      targetBtn.classList.remove('hidden');
 
-      moveTarget();
+      moveTargets();
       resetMoveTimer(currentSpeed);
 
       gameTimer = setInterval(() => {
@@ -421,7 +467,8 @@
           resetMoveTimer(currentSpeed);
           
           frenzyBadge.classList.remove('hidden');
-          targetBtn.classList.add('target-fast');
+          targetBtn1.classList.add('target-fast');
+          targetBtn2.classList.add('target-fast');
           timerText.className = "text-2xl sm:text-3xl md:text-4xl font-black text-rose-500 font-mono animate-ping transition-all";
         }
 
@@ -437,8 +484,10 @@
       clearInterval(moveTimer);
 
       frenzyBadge.classList.add('hidden');
-      targetBtn.classList.remove('target-fast');
-      targetBtn.classList.add('hidden');
+      targetBtn1.classList.remove('target-fast');
+      targetBtn2.classList.remove('target-fast');
+      targetBtn1.classList.add('hidden');
+      targetBtn2.classList.add('hidden');
 
       finalScoreVal.textContent = score;
       gameOverScreen.classList.remove('hidden');
@@ -446,7 +495,8 @@
       setTimeout(() => playerNameInput.focus(), 200);
     }
 
-    targetBtn.addEventListener('pointerdown', handleShot);
+    targetBtn1.addEventListener('pointerdown', (e) => handleShot(1, e));
+    targetBtn2.addEventListener('pointerdown', (e) => handleShot(2, e));
     startGameBtn.addEventListener('click', startGame);
     playAgainBtn.addEventListener('click', startGame);
     saveScoreBtn.addEventListener('click', submitScoreToSheet);
