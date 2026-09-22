@@ -40,7 +40,7 @@
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-[100dvh] flex flex-col items-center justify-between p-2 sm:p-4 font-sans safe-area-inset">
+<body class="bg-slate-950 text-slate-100 min-h-[100dvh] flex flex-col items-center justify-between p-2 sm:p-4 font-sans safe-area-inset relative">
 
   <!-- Header -->
   <header class="w-full max-w-xl text-center pt-1 pb-2 shrink-0">
@@ -72,41 +72,25 @@
   <main id="gameArena" class="w-full max-w-xl flex-1 min-h-[260px] max-h-[52dvh] bg-gradient-to-b from-slate-900 via-indigo-950/70 to-slate-900 rounded-2xl sm:rounded-3xl border border-slate-800 relative overflow-hidden shadow-inner cursor-crosshair-custom touch-none">
     
     <!-- Penunjuk Bilangan Gagak Tertembak -->
-    <div class="absolute top-2.5 left-3 bg-slate-950/80 border border-slate-800 px-2 py-0.5 rounded-full text-[10px] font-bold text-slate-300 z-10 flex items-center gap-1 shadow">
+    <div class="absolute top-2.5 left-3 bg-slate-950/85 border border-slate-700/80 px-2.5 py-1 rounded-full text-[11px] font-bold text-slate-200 z-10 flex items-center gap-1.5 shadow">
       <span>🐦‍⬛</span>
       <span>Gagak:</span>
       <span id="crowStreakText" class="text-amber-400 font-mono font-black">0/3</span>
     </div>
 
     <!-- Sasaran 1 -->
-    <button id="targetBtn1" class="absolute hidden text-4xl sm:text-5xl transition-all duration-75 active:scale-75 focus:outline-none target-flying select-none" aria-label="Sasaran 1">
+    <button id="targetBtn1" type="button" class="absolute hidden text-4xl sm:text-5xl transition-all duration-75 active:scale-75 focus:outline-none target-flying select-none z-10" aria-label="Sasaran 1">
       🐦‍⬛
     </button>
 
     <!-- Sasaran 2 -->
-    <button id="targetBtn2" class="absolute hidden text-4xl sm:text-5xl transition-all duration-75 active:scale-75 focus:outline-none target-flying select-none" aria-label="Sasaran 2">
+    <button id="targetBtn2" type="button" class="absolute hidden text-4xl sm:text-5xl transition-all duration-75 active:scale-75 focus:outline-none target-flying select-none z-10" aria-label="Sasaran 2">
       🕊️
     </button>
 
     <!-- Amaran Pecutan 10 Saat Terakhir -->
     <div id="frenzyBadge" class="absolute top-2 left-1/2 -translate-x-1/2 bg-rose-600/90 border border-rose-400 text-white font-black text-[10px] sm:text-xs px-3 py-0.5 rounded-full uppercase tracking-wider hidden animate-pulse shadow-lg z-10 whitespace-nowrap">
       ⚠️ KECEMASAN: 10S TERAKHIR!
-    </div>
-
-    <!-- Modal Pop-up Kuiz Kuala Lumpur -->
-    <div id="quizModal" class="absolute inset-0 bg-slate-950/95 backdrop-blur-md hidden flex flex-col items-center justify-center p-4 text-center z-40">
-      <div class="w-full max-w-sm bg-slate-900 border border-amber-500/50 rounded-2xl p-4 shadow-2xl relative">
-        <div class="inline-block bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full mb-2">
-          ⚡ 3 GAGAK DITUMPASKAN • BONUS KUIZ (+20 PTS)
-        </div>
-        <h3 id="quizQuestion" class="text-xs sm:text-sm font-bold text-slate-100 mb-3 px-1 leading-snug">
-          Soalan akan muncul di sini?
-        </h3>
-        <div id="quizOptions" class="grid grid-cols-1 gap-2 mb-1">
-          <!-- Butang pilihan dijana dynamically -->
-        </div>
-        <p id="quizFeedback" class="text-[11px] font-bold min-h-[16px] mt-2"></p>
-      </div>
     </div>
 
     <!-- Skrin Mula -->
@@ -119,15 +103,15 @@
         <p class="flex items-center justify-between"><span>🐦‍⬛ Gagak Bandar:</span> <span class="font-bold text-emerald-400">+10 Pts</span></p>
         <p class="flex items-center justify-between"><span>🕊️ Merpati Dilindungi:</span> <span class="font-bold text-rose-400">-10 Pts</span></p>
         <p class="flex items-center justify-between"><span>💣 Bahan Letupan:</span> <span class="font-bold text-rose-500">-15 Pts</span></p>
-        <p class="text-[10px] text-amber-300/90 pt-1 border-t border-slate-800 italic">💡 Tembak <b>3 ekor gagak</b> untuk membuka soalan kuiz bonus KL (+20 Pts)!</p>
+        <p class="text-[10px] text-amber-300/90 pt-1 border-t border-slate-800 italic">💡 Tembak <b>3 ekor gagak</b> untuk mencetuskan kuiz bonus KL (+20 Pts)!</p>
       </div>
-      <button id="startGameBtn" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-black py-2.5 px-7 sm:py-3 sm:px-8 rounded-xl shadow-lg transform active:scale-95 transition text-sm sm:text-base">
+      <button id="startGameBtn" type="button" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-black py-2.5 px-7 sm:py-3 sm:px-8 rounded-xl shadow-lg transform active:scale-95 transition text-sm sm:text-base cursor-pointer">
         MULA OPS (30s)
       </button>
     </div>
 
     <!-- Skrin Tamat -->
-    <div id="gameOverScreen" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md hidden flex flex-col items-center justify-center p-4 sm:p-6 text-center z-30">
+    <div id="gameOverScreen" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md hidden flex flex-col items-center justify-center p-4 sm:p-6 text-center z-20">
       <span class="text-rose-500 font-black text-2xl sm:text-3xl mb-1 tracking-wider">OPS TAMAT!</span>
       <p class="text-xs sm:text-sm text-slate-400 mb-3">Rekod markah anda terus ke pangkalan data utama.</p>
       
@@ -139,14 +123,14 @@
       <div class="w-full max-w-xs space-y-2 mb-2">
         <div class="flex gap-2">
           <input id="playerNameInput" type="text" maxlength="16" placeholder="Nama Pemain..." class="bg-slate-800 border border-slate-700 text-xs sm:text-sm rounded-xl px-3 py-2.5 sm:py-3 flex-1 text-center font-bold focus:outline-none focus:border-amber-400 text-slate-100 placeholder-slate-500" />
-          <button id="saveScoreBtn" class="bg-emerald-500 hover:bg-emerald-400 disabled:bg-slate-700 text-slate-950 font-bold px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl transition shadow text-xs sm:text-sm flex items-center justify-center">
+          <button id="saveScoreBtn" type="button" class="bg-emerald-500 hover:bg-emerald-400 disabled:bg-slate-700 text-slate-950 font-bold px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl transition shadow text-xs sm:text-sm flex items-center justify-center cursor-pointer">
             <span id="saveBtnText">Simpan</span>
           </button>
         </div>
         <p id="saveStatusMsg" class="text-[10px] text-slate-400 min-h-[14px] font-semibold"></p>
       </div>
 
-      <button id="playAgainBtn" class="text-[11px] uppercase font-bold text-slate-400 hover:text-white underline underline-offset-4 mt-1">
+      <button id="playAgainBtn" type="button" class="text-[11px] uppercase font-bold text-slate-400 hover:text-white underline underline-offset-4 mt-1 cursor-pointer">
         Main Semula Tanpa Simpan
       </button>
     </div>
@@ -159,7 +143,7 @@
         <span class="text-sm">🏆</span>
         <h3 class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-slate-200">Top 10 Pemain Terbaik (Live)</h3>
       </div>
-      <button id="refreshBoardBtn" class="text-[10px] sm:text-[11px] text-amber-400 hover:text-amber-300 transition flex items-center gap-1 font-semibold">
+      <button id="refreshBoardBtn" type="button" class="text-[10px] sm:text-[11px] text-amber-400 hover:text-amber-300 transition flex items-center gap-1 font-semibold cursor-pointer">
         <span>🔄 Kemaskini</span>
       </button>
     </div>
@@ -176,13 +160,29 @@
     © 2026 JABATAN CHALLENGE • Created by Jnol.Ai
   </footer>
 
+  <!-- MODAL KUIZ KL (Diletakkan di paras body dengan z-[99] penuh) -->
+  <div id="quizModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center p-4 z-[99] pointer-events-auto">
+    <div class="w-full max-w-sm bg-slate-900 border border-amber-500/60 rounded-2xl p-4 shadow-2xl relative text-center">
+      <div class="inline-block bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full mb-2">
+        ⚡ 3 GAGAK TUMBANG • BONUS KUIZ (+20 PTS)
+      </div>
+      <h3 id="quizQuestion" class="text-xs sm:text-sm font-bold text-slate-100 mb-3 px-1 leading-snug">
+        Soalan Kuiz KL
+      </h3>
+      <div id="quizOptions" class="grid grid-cols-1 gap-2 mb-1">
+        <!-- Pilihan butang dijana melalui JavaScript -->
+      </div>
+      <p id="quizFeedback" class="text-[11px] font-bold min-h-[16px] mt-2"></p>
+    </div>
+  </div>
+
   <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPtVrKnBwS1gQ1NRo18Ok4Eh6_Mejstgz_ujX8nVZCio4Rd-totXe2ajCVT3r5rJpf/exec";
     
     // Bank Soalan Kuala Lumpur
     const KL_QUESTIONS = [
       {
-        q: "Apakah maksud asal perkataan 'Kuala Lumpur'?",
+        q: "Apakah maksud asal nama 'Kuala Lumpur'?",
         options: ["Pertemuan sungai berlumpur", "Lembah bukit hijau", "Pekan bijih timah", "Pelabuhan dagang utama"],
         ans: 0
       },
@@ -197,22 +197,22 @@
         ans: 1
       },
       {
-        q: "Apakah menara kedua tertinggi di dunia yang tersergam di Kuala Lumpur?",
+        q: "Apakah menara kedua tertinggi di dunia yang terletak di Kuala Lumpur?",
         options: ["Menara TRX", "Menara Merdeka 118", "Menara Kuala Lumpur", "The Exchange 106"],
         ans: 1
       },
       {
-        q: "Pada tahun berapakah Kuala Lumpur diisytiharkan secara rasmi sebagai sebuah bandar raya?",
+        q: "Pada tahun berapakah Kuala Lumpur diisytiharkan secara rasmi sebagai bandar raya?",
         options: ["1957", "1963", "1972", "1974"],
         ans: 2
       },
       {
-        q: "Apakah nama agensi kerajaan tempatan yang mentadbir wilayah persekutuan Kuala Lumpur?",
+        q: "Apakah nama agensi kerajaan tempatan yang mentadbir wilayah Kuala Lumpur?",
         options: ["MBPJ", "MBSA", "DBKL", "MPAJ"],
         ans: 2
       },
       {
-        q: "Bangunan bersejarah manakah yang menempatkan menara jam terkenal bertentangan Dataran Merdeka?",
+        q: "Bangunan bersejarah manakah yang menempatkan menara jam bertentangan Dataran Merdeka?",
         options: ["Bangunan Sultan Abdul Samad", "Carcosa Seri Negara", "Muzium Diraja", "Stesen Keretapi KL"],
         ans: 0
       },
@@ -233,7 +233,7 @@
       NORMAL_SPEED_MS: 900,
       FRENZY_SPEED_MS: 500,
       BONUS_POINTS: 20,
-      CROWS_PER_QUIZ: 3, // Syarat 3 ekor gagak untuk cetus kuiz
+      CROWS_PER_QUIZ: 3,
       TARGET_TYPES: {
         CROW: { key: 'CROW', emoji: '🐦‍⬛', points: 10, color: 'text-emerald-400' },
         BIRD: { key: 'BIRD', emoji: '🕊️', points: -10, color: 'text-rose-400' },
@@ -254,7 +254,7 @@
     let isPlaying = false;
     let isPausedForQuiz = false;
     let currentSpeed = CONFIG.NORMAL_SPEED_MS;
-    let crowStreak = 0; // Mengira tembakan gagak terkini
+    let crowStreak = 0;
 
     let slot1Data = null;
     let slot2Data = null;
@@ -508,7 +508,7 @@
       crowStreakText.textContent = `${crowStreak}/${CONFIG.CROWS_PER_QUIZ}`;
     }
 
-    // Papar Kuiz Kuala Lumpur secara rawak apabila 3 gagak berjaya ditembak
+    // Paparkan Kuiz Kuala Lumpur
     function triggerRandomKLQuiz() {
       isPausedForQuiz = true;
       clearInterval(moveTimer);
@@ -524,13 +524,16 @@
 
       randomItem.options.forEach((optText, index) => {
         const btn = document.createElement('button');
-        btn.className = "w-full text-left bg-slate-800 hover:bg-slate-700 active:bg-amber-500 active:text-slate-950 border border-slate-700 hover:border-amber-400 text-slate-200 text-xs py-2 px-3 rounded-lg font-medium transition duration-150";
+        btn.type = "button";
+        btn.className = "w-full text-left bg-slate-800 hover:bg-slate-700 active:bg-amber-500 active:text-slate-950 border border-slate-700 hover:border-amber-400 text-slate-200 text-xs py-2.5 px-3 rounded-xl font-medium transition cursor-pointer";
         btn.textContent = `${String.fromCharCode(65 + index)}. ${optText}`;
         btn.onclick = () => handleQuizAnswer(index === randomItem.ans, btn);
         quizOptions.appendChild(btn);
       });
 
+      // Tunjukkan modal
       quizModal.classList.remove('hidden');
+      quizModal.classList.add('flex');
     }
 
     function handleQuizAnswer(isCorrect, clickedBtn) {
@@ -555,12 +558,13 @@
         quizFeedback.className = "text-[11px] font-bold text-rose-400 min-h-[16px] mt-2";
       }
 
-      // Reset semula kiraan tembakan gagak selepas menjawab kuiz
+      // Reset kiraan gagak kepada 0 untuk kitaran seterusnya
       crowStreak = 0;
       updateCrowStreakDisplay();
 
       setTimeout(() => {
         quizModal.classList.add('hidden');
+        quizModal.classList.remove('flex');
         resumeGameAfterQuiz();
       }, 900);
     }
@@ -615,15 +619,14 @@
       const clickY = clientY - rect.top;
       spawnHitPopup(clickX, clickY, targetData.points, targetData.color);
 
-      // Logik jika burung gagak ditembak
+      // Semak jika tembakan mengenai gagak
       if (targetData.key === 'CROW') {
         crowStreak++;
         updateCrowStreakDisplay();
 
-        // Semak sekiranya sudah capai 3 ekor gagak
         if (crowStreak >= CONFIG.CROWS_PER_QUIZ) {
           triggerRandomKLQuiz();
-          return;
+          return; // Hentikan fungsi di sini agar sasaran tidak dipindahkan serentak
         }
       }
 
@@ -647,6 +650,7 @@
       saveStatusMsg.textContent = '';
       frenzyBadge.classList.add('hidden');
       quizModal.classList.add('hidden');
+      quizModal.classList.remove('flex');
       targetBtn1.classList.remove('target-fast');
       targetBtn2.classList.remove('target-fast');
 
@@ -667,6 +671,7 @@
       clearInterval(moveTimer);
 
       quizModal.classList.add('hidden');
+      quizModal.classList.remove('flex');
       frenzyBadge.classList.add('hidden');
       targetBtn1.classList.remove('target-fast');
       targetBtn2.classList.remove('target-fast');
