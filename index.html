@@ -103,7 +103,7 @@
         <p class="flex items-center justify-between"><span>🐦‍⬛ Gagak Bandar:</span> <span class="font-bold text-emerald-400">+10 Pts</span></p>
         <p class="flex items-center justify-between"><span>🕊️ Merpati Dilindungi:</span> <span class="font-bold text-rose-400">-10 Pts</span></p>
         <p class="flex items-center justify-between"><span>💣 Bahan Letupan:</span> <span class="font-bold text-rose-500">-15 Pts</span></p>
-        <p class="text-[10px] text-amber-300/90 pt-1 border-t border-slate-800 italic">💡 Tembak <b>3 ekor gagak</b> untuk membuka soalan kuiz bonus KL (+20 Pts)!</p>
+        <p class="text-[10px] text-amber-300/90 pt-1 border-t border-slate-800 italic">💡 Tembak <b>3 ekor gagak</b> untuk membuka soalan kuiz bonus KL (+20 Pts, masa 15s)!</p>
       </div>
       <button id="startGameBtn" type="button" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-black py-2.5 px-7 sm:py-3 sm:px-8 rounded-xl shadow-lg transform active:scale-95 transition text-sm sm:text-base cursor-pointer">
         MULA OPS (30s)
@@ -163,9 +163,20 @@
   <!-- MODAL KUIZ KL -->
   <div id="quizModal" style="display: none;" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md items-center justify-center p-4 z-[9999]">
     <div class="w-full max-w-sm bg-slate-900 border-2 border-amber-500 rounded-2xl p-5 shadow-2xl relative text-center">
-      <div class="inline-block bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-black uppercase px-3 py-1 rounded-full mb-3 tracking-wide">
-        ⚡ 3 GAGAK TUMBANG • BONUS KUIZ (+20 PTS)
+      <div class="flex items-center justify-between gap-2 mb-3">
+        <span class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-black uppercase px-2.5 py-1 rounded-full tracking-wide">
+          ⚡ BONUS KUIZ (+20 PTS)
+        </span>
+        <span class="bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[11px] font-black font-mono px-2.5 py-1 rounded-full flex items-center gap-1">
+          ⏳ <span id="quizTimerText">15s</span>
+        </span>
       </div>
+
+      <!-- Bar Kemajuan Masa Kuiz -->
+      <div class="w-full bg-slate-800 rounded-full h-1.5 mb-3 overflow-hidden">
+        <div id="quizProgressBar" class="bg-amber-400 h-full w-full transition-all duration-1000 ease-linear"></div>
+      </div>
+
       <h3 id="quizQuestion" class="text-sm font-bold text-slate-100 mb-4 px-1 leading-snug">
         Memuatkan soalan...
       </h3>
@@ -285,6 +296,7 @@
 
     const CONFIG = {
       TOTAL_TIME: 30,
+      QUIZ_TIME: 15,
       NORMAL_SPEED_MS: 900,
       FRENZY_SPEED_MS: 500,
       BONUS_POINTS: 20,
@@ -306,6 +318,8 @@
     let timeLeft = CONFIG.TOTAL_TIME;
     let gameTimer = null;
     let moveTimer = null;
+    let quizTimer = null;
+    let quizTimeLeft = CONFIG.QUIZ_TIME;
     let isPlaying = false;
     let isPausedForQuiz = false;
     let currentSpeed = CONFIG.NORMAL_SPEED_MS;
@@ -339,6 +353,8 @@
     const quizQuestion = document.getElementById('quizQuestion');
     const quizOptions = document.getElementById('quizOptions');
     const quizFeedback = document.getElementById('quizFeedback');
+    const quizTimerText = document.getElementById('quizTimerText');
+    const quizProgressBar = document.getElementById('quizProgressBar');
 
     let audioCtx = null;
     function initAudio() {
@@ -567,6 +583,7 @@
       isPausedForQuiz = true;
       clearInterval(moveTimer);
       clearInterval(gameTimer);
+      clearInterval(quizTimer);
 
       targetBtn1.classList.add('hidden');
       targetBtn2.classList.add('hidden');
@@ -576,21 +593,71 @@
       quizFeedback.textContent = "";
       quizOptions.innerHTML = "";
 
+      quizTimeLeft = CONFIG.QUIZ_TIME;
+      quizTimerText.textContent = `${quizTimeLeft}s`;
+      quizProgressBar.style.width = '100%';
+      quizProgressBar.className = "bg-amber-400 h-full transition-all duration-1000 ease-linear";
+
       randomItem.options.forEach((optText, index) => {
         const btn = document.createElement('button');
         btn.type = "button";
         btn.className = "w-full text-left bg-slate-800 hover:bg-slate-700 active:bg-amber-500 active:text-slate-950 border border-slate-700 hover:border-amber-400 text-slate-100 text-xs py-2.5 px-3 rounded-xl font-semibold transition cursor-pointer";
         btn.textContent = `${String.fromCharCode(65 + index)}. ${optText}`;
-        btn.onclick = () => handleQuizAnswer(index === randomItem.ans, btn);
+        btn.onclick = () => handleQuizAnswer(index === randomItem.ans, btn, randomItem.ans);
         quizOptions.appendChild(btn);
       });
 
       quizModal.style.display = 'flex';
+
+      // Mulakan kiraan 15 saat kuiz
+      quizTimer = setInterval(() => {
+        quizTimeLeft--;
+        quizTimerText.textContent = `${quizTimeLeft}s`;
+
+        const percentage = Math.max(0, (quizTimeLeft / CONFIG.QUIZ_TIME) * 100);
+        quizProgressBar.style.width = `${percentage}%`;
+
+        if (quizTimeLeft <= 5) {
+          quizProgressBar.className = "bg-rose-500 h-full transition-all duration-1000 ease-linear";
+        }
+
+        if (quizTimeLeft <= 0) {
+          clearInterval(quizTimer);
+          handleQuizTimeout(randomItem.ans);
+        }
+      }, 1000);
     }
 
-    function handleQuizAnswer(isCorrect, clickedBtn) {
+    function handleQuizTimeout(correctIndex) {
       const allButtons = quizOptions.querySelectorAll('button');
-      allButtons.forEach(b => b.disabled = true);
+      allButtons.forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === correctIndex) {
+          b.className = "w-full text-left bg-emerald-600/80 border border-emerald-400 text-white text-xs py-2.5 px-3 rounded-xl font-bold transition";
+        }
+      });
+
+      quizFeedback.textContent = "Masa menjawab tamat! Tiada markah bonus.";
+      quizFeedback.className = "text-xs font-bold text-rose-400 min-h-[18px] mt-2";
+
+      crowStreak = 0;
+      updateCrowStreakDisplay();
+
+      setTimeout(() => {
+        quizModal.style.display = 'none';
+        resumeGameAfterQuiz();
+      }, 1200);
+    }
+
+    function handleQuizAnswer(isCorrect, clickedBtn, correctIndex) {
+      clearInterval(quizTimer);
+      const allButtons = quizOptions.querySelectorAll('button');
+      allButtons.forEach((b, idx) => {
+        b.disabled = true;
+        if (!isCorrect && idx === correctIndex) {
+          b.className = "w-full text-left bg-emerald-600/70 border border-emerald-400 text-white text-xs py-2.5 px-3 rounded-xl font-semibold";
+        }
+      });
 
       if (isCorrect) {
         clickedBtn.className = "w-full text-left bg-emerald-600 border border-emerald-400 text-white text-xs py-2.5 px-3 rounded-xl font-bold transition";
@@ -614,7 +681,7 @@
       setTimeout(() => {
         quizModal.style.display = 'none';
         resumeGameAfterQuiz();
-      }, 1000);
+      }, 1100);
     }
 
     function resumeGameAfterQuiz() {
@@ -712,6 +779,7 @@
       resetMoveTimer(currentSpeed);
 
       clearInterval(gameTimer);
+      clearInterval(quizTimer);
       gameTimer = setInterval(tickGameTimer, 1000);
     }
 
@@ -720,6 +788,7 @@
       isPausedForQuiz = false;
       clearInterval(gameTimer);
       clearInterval(moveTimer);
+      clearInterval(quizTimer);
 
       quizModal.style.display = 'none';
       frenzyBadge.classList.add('hidden');
