@@ -103,7 +103,7 @@
         <p class="flex items-center justify-between"><span>🐦‍⬛ Gagak Bandar:</span> <span class="font-bold text-emerald-400">+10 Pts</span></p>
         <p class="flex items-center justify-between"><span>🕊️ Merpati Dilindungi:</span> <span class="font-bold text-rose-400">-10 Pts</span></p>
         <p class="flex items-center justify-between"><span>💣 Bahan Letupan:</span> <span class="font-bold text-rose-500">-15 Pts</span></p>
-        <p class="text-[10px] text-amber-300/90 pt-1 border-t border-slate-800 italic">💡 Tembak <b>3 ekor gagak</b> untuk mencetuskan kuiz bonus KL (+20 Pts)!</p>
+        <p class="text-[10px] text-amber-300/90 pt-1 border-t border-slate-800 italic">💡 Tembak <b>3 ekor gagak</b> untuk membuka soalan kuiz bonus KL (+20 Pts)!</p>
       </div>
       <button id="startGameBtn" type="button" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-black py-2.5 px-7 sm:py-3 sm:px-8 rounded-xl shadow-lg transform active:scale-95 transition text-sm sm:text-base cursor-pointer">
         MULA OPS (30s)
@@ -160,19 +160,19 @@
     © 2026 JABATAN CHALLENGE • Created by Jnol.Ai
   </footer>
 
-  <!-- MODAL KUIZ KL (Diletakkan di paras body dengan z-[99] penuh) -->
-  <div id="quizModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center p-4 z-[99] pointer-events-auto">
-    <div class="w-full max-w-sm bg-slate-900 border border-amber-500/60 rounded-2xl p-4 shadow-2xl relative text-center">
-      <div class="inline-block bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full mb-2">
+  <!-- MODAL KUIZ KL (Menggunakan kawalan inline display bagi mengelak isu Tailwind override) -->
+  <div id="quizModal" style="display: none;" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md items-center justify-center p-4 z-[9999]">
+    <div class="w-full max-w-sm bg-slate-900 border-2 border-amber-500 rounded-2xl p-5 shadow-2xl relative text-center">
+      <div class="inline-block bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-black uppercase px-3 py-1 rounded-full mb-3 tracking-wide">
         ⚡ 3 GAGAK TUMBANG • BONUS KUIZ (+20 PTS)
       </div>
-      <h3 id="quizQuestion" class="text-xs sm:text-sm font-bold text-slate-100 mb-3 px-1 leading-snug">
-        Soalan Kuiz KL
+      <h3 id="quizQuestion" class="text-sm font-bold text-slate-100 mb-4 px-1 leading-snug">
+        Memuatkan soalan...
       </h3>
-      <div id="quizOptions" class="grid grid-cols-1 gap-2 mb-1">
-        <!-- Pilihan butang dijana melalui JavaScript -->
+      <div id="quizOptions" class="grid grid-cols-1 gap-2.5 mb-2">
+        <!-- Pilihan butang -->
       </div>
-      <p id="quizFeedback" class="text-[11px] font-bold min-h-[16px] mt-2"></p>
+      <p id="quizFeedback" class="text-xs font-bold min-h-[18px] mt-2"></p>
     </div>
   </div>
 
@@ -197,22 +197,22 @@
         ans: 1
       },
       {
-        q: "Apakah menara kedua tertinggi di dunia yang terletak di Kuala Lumpur?",
+        q: "Apakah menara kedua tertinggi di dunia yang tersergam di Kuala Lumpur?",
         options: ["Menara TRX", "Menara Merdeka 118", "Menara Kuala Lumpur", "The Exchange 106"],
         ans: 1
       },
       {
-        q: "Pada tahun berapakah Kuala Lumpur diisytiharkan secara rasmi sebagai bandar raya?",
+        q: "Pada tahun berapakah Kuala Lumpur diisytiharkan secara rasmi sebagai sebuah bandar raya?",
         options: ["1957", "1963", "1972", "1974"],
         ans: 2
       },
       {
-        q: "Apakah nama agensi kerajaan tempatan yang mentadbir wilayah Kuala Lumpur?",
+        q: "Apakah nama agensi kerajaan tempatan yang mentadbir wilayah persekutuan Kuala Lumpur?",
         options: ["MBPJ", "MBSA", "DBKL", "MPAJ"],
         ans: 2
       },
       {
-        q: "Bangunan bersejarah manakah yang menempatkan menara jam bertentangan Dataran Merdeka?",
+        q: "Bangunan bersejarah manakah yang menempatkan menara jam terkenal bertentangan Dataran Merdeka?",
         options: ["Bangunan Sultan Abdul Samad", "Carcosa Seri Negara", "Muzium Diraja", "Stesen Keretapi KL"],
         ans: 0
       },
@@ -317,7 +317,7 @@
           osc.frequency.setValueAtTime(523.25, now);
           osc.frequency.setValueAtTime(659.25, now + 0.08);
           osc.frequency.setValueAtTime(783.99, now + 0.16);
-          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.setValueAtTime(0.35, now);
           gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
@@ -508,7 +508,7 @@
       crowStreakText.textContent = `${crowStreak}/${CONFIG.CROWS_PER_QUIZ}`;
     }
 
-    // Paparkan Kuiz Kuala Lumpur
+    // Paparkan Kuiz Rawak KL secara tepat
     function triggerRandomKLQuiz() {
       isPausedForQuiz = true;
       clearInterval(moveTimer);
@@ -525,15 +525,14 @@
       randomItem.options.forEach((optText, index) => {
         const btn = document.createElement('button');
         btn.type = "button";
-        btn.className = "w-full text-left bg-slate-800 hover:bg-slate-700 active:bg-amber-500 active:text-slate-950 border border-slate-700 hover:border-amber-400 text-slate-200 text-xs py-2.5 px-3 rounded-xl font-medium transition cursor-pointer";
+        btn.className = "w-full text-left bg-slate-800 hover:bg-slate-700 active:bg-amber-500 active:text-slate-950 border border-slate-700 hover:border-amber-400 text-slate-100 text-xs py-2.5 px-3 rounded-xl font-semibold transition cursor-pointer";
         btn.textContent = `${String.fromCharCode(65 + index)}. ${optText}`;
         btn.onclick = () => handleQuizAnswer(index === randomItem.ans, btn);
         quizOptions.appendChild(btn);
       });
 
-      // Tunjukkan modal
-      quizModal.classList.remove('hidden');
-      quizModal.classList.add('flex');
+      // Paksa papar modal melalui inline style display
+      quizModal.style.display = 'flex';
     }
 
     function handleQuizAnswer(isCorrect, clickedBtn) {
@@ -541,10 +540,9 @@
       allButtons.forEach(b => b.disabled = true);
 
       if (isCorrect) {
-        clickedBtn.classList.remove('bg-slate-800', 'border-slate-700');
-        clickedBtn.classList.add('bg-emerald-600', 'border-emerald-400', 'text-white');
+        clickedBtn.className = "w-full text-left bg-emerald-600 border border-emerald-400 text-white text-xs py-2.5 px-3 rounded-xl font-bold transition";
         quizFeedback.textContent = `TEPAT! +${CONFIG.BONUS_POINTS} Pts Bonus KL! 🎉`;
-        quizFeedback.className = "text-[11px] font-bold text-emerald-400 min-h-[16px] mt-2";
+        quizFeedback.className = "text-xs font-bold text-emerald-400 min-h-[18px] mt-2";
         playTone('BONUS');
 
         score += CONFIG.BONUS_POINTS;
@@ -552,21 +550,19 @@
 
         spawnHitPopup(arena.clientWidth / 2 - 20, arena.clientHeight / 2 - 20, CONFIG.BONUS_POINTS, 'text-emerald-400');
       } else {
-        clickedBtn.classList.remove('bg-slate-800', 'border-slate-700');
-        clickedBtn.classList.add('bg-rose-600', 'border-rose-400', 'text-white');
+        clickedBtn.className = "w-full text-left bg-rose-600 border border-rose-400 text-white text-xs py-2.5 px-3 rounded-xl font-bold transition";
         quizFeedback.textContent = "Kurang Tepat! Tiada markah bonus.";
-        quizFeedback.className = "text-[11px] font-bold text-rose-400 min-h-[16px] mt-2";
+        quizFeedback.className = "text-xs font-bold text-rose-400 min-h-[18px] mt-2";
       }
 
-      // Reset kiraan gagak kepada 0 untuk kitaran seterusnya
+      // Set semula kiraan gagak kepada 0
       crowStreak = 0;
       updateCrowStreakDisplay();
 
       setTimeout(() => {
-        quizModal.classList.add('hidden');
-        quizModal.classList.remove('flex');
+        quizModal.style.display = 'none';
         resumeGameAfterQuiz();
-      }, 900);
+      }, 1000);
     }
 
     function resumeGameAfterQuiz() {
@@ -599,10 +595,15 @@
 
     function handleShot(slotIndex, e) {
       if (!isPlaying || isPausedForQuiz) return;
-      e.preventDefault();
-      e.stopPropagation();
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
 
+      const clickedBtn = slotIndex === 1 ? targetBtn1 : targetBtn2;
+      const isCrow = clickedBtn.textContent.includes('🐦‍⬛');
       const targetData = slotIndex === 1 ? slot1Data : slot2Data;
+
       if (!targetData) return;
 
       playTone(targetData.key);
@@ -612,21 +613,21 @@
       scoreText.textContent = score;
 
       const rect = arena.getBoundingClientRect();
-      const clientX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
-      const clientY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
+      const clientX = (e && e.clientX) || (e && e.touches && e.touches[0] && e.touches[0].clientX) || (rect.left + rect.width / 2);
+      const clientY = (e && e.clientY) || (e && e.touches && e.touches[0] && e.touches[0].clientY) || (rect.top + rect.height / 2);
       
       const clickX = clientX - rect.left;
       const clickY = clientY - rect.top;
       spawnHitPopup(clickX, clickY, targetData.points, targetData.color);
 
-      // Semak jika tembakan mengenai gagak
-      if (targetData.key === 'CROW') {
+      // Semakan kalis ralat bagi tembakan gagak
+      if (isCrow || targetData.key === 'CROW') {
         crowStreak++;
         updateCrowStreakDisplay();
 
         if (crowStreak >= CONFIG.CROWS_PER_QUIZ) {
           triggerRandomKLQuiz();
-          return; // Hentikan fungsi di sini agar sasaran tidak dipindahkan serentak
+          return; // Hentikan di sini agar sasaran tidak berganti serentak
         }
       }
 
@@ -649,8 +650,7 @@
       timerText.className = "text-xl sm:text-2xl md:text-3xl font-black text-rose-400 font-mono transition-all";
       saveStatusMsg.textContent = '';
       frenzyBadge.classList.add('hidden');
-      quizModal.classList.add('hidden');
-      quizModal.classList.remove('flex');
+      quizModal.style.display = 'none';
       targetBtn1.classList.remove('target-fast');
       targetBtn2.classList.remove('target-fast');
 
@@ -670,8 +670,7 @@
       clearInterval(gameTimer);
       clearInterval(moveTimer);
 
-      quizModal.classList.add('hidden');
-      quizModal.classList.remove('flex');
+      quizModal.style.display = 'none';
       frenzyBadge.classList.add('hidden');
       targetBtn1.classList.remove('target-fast');
       targetBtn2.classList.remove('target-fast');
