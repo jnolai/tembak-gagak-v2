@@ -160,7 +160,7 @@
     © 2026 JABATAN CHALLENGE • Created by Jnol.Ai
   </footer>
 
-  <!-- MODAL KUIZ KL (Menggunakan kawalan inline display bagi mengelak isu Tailwind override) -->
+  <!-- MODAL KUIZ KL -->
   <div id="quizModal" style="display: none;" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md items-center justify-center p-4 z-[9999]">
     <div class="w-full max-w-sm bg-slate-900 border-2 border-amber-500 rounded-2xl p-5 shadow-2xl relative text-center">
       <div class="inline-block bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-black uppercase px-3 py-1 rounded-full mb-3 tracking-wide">
@@ -179,53 +179,108 @@
   <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPtVrKnBwS1gQ1NRo18Ok4Eh6_Mejstgz_ujX8nVZCio4Rd-totXe2ajCVT3r5rJpf/exec";
     
-    // Bank Soalan Kuala Lumpur
+    // Bank 100 Soalan Kuala Lumpur
     const KL_QUESTIONS = [
-      {
-        q: "Apakah maksud asal nama 'Kuala Lumpur'?",
-        options: ["Pertemuan sungai berlumpur", "Lembah bukit hijau", "Pekan bijih timah", "Pelabuhan dagang utama"],
-        ans: 0
-      },
-      {
-        q: "Kuala Lumpur diasaskan pada pertemuan dua sungai iaitu Sungai Gombak dan Sungai apa?",
-        options: ["Sungai Langat", "Sungai Klang", "Sungai Bernam", "Sungai Selangor"],
-        ans: 1
-      },
-      {
-        q: "Berapakah bilangan tingkat Menara Berkembar Petronas (KLCC)?",
-        options: ["84 Tingkat", "88 Tingkat", "92 Tingkat", "100 Tingkat"],
-        ans: 1
-      },
-      {
-        q: "Apakah menara kedua tertinggi di dunia yang tersergam di Kuala Lumpur?",
-        options: ["Menara TRX", "Menara Merdeka 118", "Menara Kuala Lumpur", "The Exchange 106"],
-        ans: 1
-      },
-      {
-        q: "Pada tahun berapakah Kuala Lumpur diisytiharkan secara rasmi sebagai sebuah bandar raya?",
-        options: ["1957", "1963", "1972", "1974"],
-        ans: 2
-      },
-      {
-        q: "Apakah nama agensi kerajaan tempatan yang mentadbir wilayah persekutuan Kuala Lumpur?",
-        options: ["MBPJ", "MBSA", "DBKL", "MPAJ"],
-        ans: 2
-      },
-      {
-        q: "Bangunan bersejarah manakah yang menempatkan menara jam terkenal bertentangan Dataran Merdeka?",
-        options: ["Bangunan Sultan Abdul Samad", "Carcosa Seri Negara", "Muzium Diraja", "Stesen Keretapi KL"],
-        ans: 0
-      },
-      {
-        q: "Bilakah sambutan Hari Wilayah Persekutuan diraikan pada setiap tahun?",
-        options: ["1 Januari", "1 Februari", "31 Ogos", "16 September"],
-        ans: 1
-      },
-      {
-        q: "Apakah nama taman tasik tertua di tengah-tengah ibu kota Kuala Lumpur?",
-        options: ["Taman Tasik Titiwangsa", "Taman Botani Perdana", "Taman Metropolitan Kepong", "Taman KLCC"],
-        ans: 1
-      }
+      { q: "Apakah maksud asal perkataan 'Kuala Lumpur'?", options: ["Pertemuan sungai berlumpur", "Lembah bukit hijau", "Pekan bijih timah", "Pelabuhan dagang utama"], ans: 0 },
+      { q: "Kuala Lumpur diasaskan pada pertemuan dua batang sungai iaitu Sungai Gombak dan Sungai apa?", options: ["Sungai Langat", "Sungai Klang", "Sungai Bernam", "Sungai Selangor"], ans: 1 },
+      { q: "Siapakah tokoh yang terkenal sebagai Kapitan Cina Ketiga yang memacu pembangunan awal Kuala Lumpur?", options: ["Yap Ah Loy", "Yap Ah Shak", "Kow Kai Seng", "Chan Sow Lin"], ans: 0 },
+      { q: "Siapakah pembesar Melayu yang membuka lombong bijih timah di Ampang pada dekad 1850-an?", options: ["Raja Mahadi", "Raja Abdullah", "Dato' Maharajalela", "Raja Asal"], ans: 1 },
+      { q: "Pada tahun berapakah Kuala Lumpur dinaik taraf dan diisytiharkan secara rasmi sebagai sebuah bandar raya?", options: ["1957", "1963", "1972", "1974"], ans: 2 },
+      { q: "Pada tarikh berapakah Kuala Lumpur secara rasmi diserahkan oleh Selangor menjadi Wilayah Persekutuan?", options: ["1 Februari 1974", "31 Ogos 1970", "1 Januari 1972", "16 September 1975"], ans: 0 },
+      { q: "Siapakah tokoh yang dilantik sebagai Datuk Bandar Kuala Lumpur yang pertama pada tahun 1972?", options: ["Tan Sri Elyas Omar", "Tan Sri Lokman Yusof", "Tan Sri Yaacob Latiff", "Tan Sri Kamaruzzaman Shariff"], ans: 1 },
+      { q: "Di manakah bendera Union Jack diturunkan dan bendera Persekutuan Tanah Melayu dikibarkan buat kali pertama pada 31 Ogos 1957?", options: ["Stadium Merdeka", "Padang Kelab Selangor (Dataran Merdeka)", "Taman Tasik Perdana", "Stesen Keretapi KL"], ans: 1 },
+      { q: "Apakah nama stadium bersejarah di KL tempat pengisytiharan kemerdekaan negara dibacakan oleh Tunku Abdul Rahman?", options: ["Stadium Bukit Jalil", "Stadium Merdeka", "Stadium Negara", "Stadium Chin Woo"], ans: 1 },
+      { q: "Apakah nama stadium berbumbung terawal di Malaysia yang terletak bersebelahan Stadium Merdeka?", options: ["Stadium Titiwangsa", "Stadium Negara", "Axiata Arena", "Stadium Badminton Cheras"], ans: 1 },
+      { q: "Kawasan penempatan terawal masyarakat Melayu di tengah Kuala Lumpur yang diwartakan pada tahun 1900 ialah?", options: ["Kampung Pandan", "Kampung Baru", "Kampung Kerinchi", "Kampung Datuk Keramat"], ans: 1 },
+      { q: "Sebelum berpindah ke Shah Alam pada 1978, Kuala Lumpur pernah menjadi ibu negeri bagi negeri mana?", options: ["Perak", "Negeri Sembilan", "Selangor", "Pahang"], ans: 2 },
+      { q: "Residen British pertama di Selangor yang memindahkan pusat pentadbiran negeri dari Klang ke Kuala Lumpur pada 1880 ialah?", options: ["J.W.W. Birch", "Frank Swettenham", "Hugh Low", "James Brooke"], ans: 1 },
+      { q: "Apakah fungsi asal Bangunan Sultan Abdul Samad semasa era pentadbiran kolonial British?", options: ["Kediaman Gabenor", "Ibu Pejabat Sekretariat Pentadbiran Negeri-negeri Melayu Bersekutu", "Mahkamah Tinggi Tentera", "Stesen Keretapi Pusat"], ans: 1 },
+      { q: "Apakah gaya seni bina utama yang menjadi inspirasi Bangunan Sultan Abdul Samad?", options: ["Gothic Victoria", "Mughal / Moorish / Neo-Saracenic", "Baroque Moden", "Art Deco"], ans: 1 },
+      { q: "Pusat seni bina bersejarah Pasar Seni (Central Market) asalnya dibina pada tahun 1888 sebagai apa?", options: ["Pasar basah utama bandar", "Gudang simpanan bijih timah", "Panggung wayang terawal", "Stesen bas ekspres"], ans: 0 },
+      { q: "Bangunan bersejarah Carcosa Seri Negara pada asalnya dibina sebagai apa?", options: ["Balai polis kolonial", "Kediaman rasmi Residen Jeneral Frank Swettenham", "Hospital tentera", "Muzium senjata"], ans: 1 },
+      { q: "Banjir besar yang melanda Kuala Lumpur pada awal tahun 1971 membawa kepada penubuhan apa?", options: ["DBKL & Jawatankuasa Pengurusan Bencana Bandar", "Terowong SMART", "Sistem Monorel", "Sungai Klang Expressway"], ans: 0 },
+      { q: "Kuala Lumpur pernah menjadi tuan rumah Sukan Komanwel (SUKOM) pada tahun berapa?", options: ["1994", "1998", "2002", "2006"], ans: 1 },
+      { q: "Pekan perlombongan awal di utara KL yang dinamakan sempena peneroka bijih timah terkemuka ialah?", options: ["Kepong", "Chan Sow Lin", "Setapak", "Segambut"], ans: 1 },
+      { q: "Berapakah bilangan tingkat bagi Menara Berkembar Petronas (KLCC)?", options: ["84 Tingkat", "88 Tingkat", "92 Tingkat", "100 Tingkat"], ans: 1 },
+      { q: "Apakah menara kedua tertinggi di dunia yang tersergam megah di Kuala Lumpur?", options: ["Menara Merdeka 118", "Menara TRX", "The Exchange 106", "Menara Kuala Lumpur"], ans: 0 },
+      { q: "Jejantas udara (Skybridge) Menara Berkembar Petronas menghubungkan tingkat berapa?", options: ["Tingkat 38 dan 39", "Tingkat 41 dan 42", "Tingkat 45 dan 46", "Tingkat 50 dan 51"], ans: 1 },
+      { q: "Siapakah arkitek antarabangsa yang mereka bentuk Menara Berkembar Petronas?", options: ["Cesar Pelli", "Zaha Hadid", "Norman Foster", "I.M. Pei"], ans: 0 },
+      { q: "Berapakah ketinggian struktur Menara Kuala Lumpur (KL Tower)?", options: ["381 meter", "421 meter", "452 meter", "509 meter"], ans: 1 },
+      { q: "Di atas bukit manakah terletaknya Menara Kuala Lumpur?", options: ["Bukit Nanas", "Bukit Antarabangsa", "Bukit Kiara", "Bukit Tunku"], ans: 0 },
+      { q: "Apakah bangunan pencakar langit utama yang menjadi ikon pusat kewangan Tun Razak Exchange?", options: ["Menara Merdeka 118", "The Exchange 106", "Menara TM", "Four Seasons Place"], ans: 1 },
+      { q: "Apakah ciri unik bumbung Masjid Negara di Kuala Lumpur?", options: ["Kubah kaca bulat", "Bumbung konkrit berlipat berbentuk payung separa kembang", "Menara berkembar gaya Uthmaniyyah", "Bumbung limas minangkabau"], ans: 1 },
+      { q: "Masjid manakah yang dibina di tapak pertemuan Sungai Klang dan Sungai Gombak?", options: ["Masjid Wilayah Persekutuan", "Masjid Jamek Sultan Abdul Samad", "Masjid Negara", "Masjid Asy-Syakirin KLCC"], ans: 1 },
+      { q: "Masjid Wilayah Persekutuan di Jalan Tuanku Abdul Halim menggabungkan pengaruh seni bina empayar apa?", options: ["Uthmaniyyah (Turkiye) dan Melayu", "Moghul India dan Moorish", "Parsi dan Gothic", "Cina Tradisional"], ans: 0 },
+      { q: "Tugu Peringatan Negara (Tugu Negara) dibina untuk memperingati jasa siapa?", options: ["Pahlawan yang gugur mempertahankan kedaulatan tanah air", "Pembina landasan keretapi", "Raja-raja Melayu zaman silam", "Pengasas bandar Kuala Lumpur"], ans: 0 },
+      { q: "Siapakah pengukir terkenal Amerika yang mereka bentuk arca gangsa Tugu Negara?", options: ["Felix de Weldon", "Gutzon Borglum", "Auguste Rodin", "Henry Moore"], ans: 0 },
+      { q: "Berapakah ketinggian tiang bendera di Dataran Merdeka yang pernah diiktiraf antara tertinggi di dunia?", options: ["65 meter", "95 meter", "110 meter", "130 meter"], ans: 1 },
+      { q: "Apakah nama pintu gerbang ikonik laluan masuk Chinatown di Jalan Petaling?", options: ["Gerbang Mahameru", "Gerbang Naga Hijau", "Gerbang Petaling Street", "Gerbang Harmoni KL"], ans: 2 },
+      { q: "Kuil Hindu tertua di Kuala Lumpur yang diasaskan pada tahun 1873 ialah?", options: ["Kuil Sri Maha Mariamman", "Kuil Sri Kandaswamy", "Kuil Batu Caves", "Kuil Sri Subramaniar"], ans: 0 },
+      { q: "Tokong Thean Hou yang tersergam indah di Bukit Petaling didedikasikan khas kepada dewi apa?", options: ["Dewi Guan Yin", "Dewi Tian Hou (Mazu)", "Dewi Tara", "Dewi Saraswati"], ans: 1 },
+      { q: "Apakah nama jambatan pejalan kaki berlampu LED yang menghubungkan Kampung Baru dengan kawasan KLCC?", options: ["Jambatan Seri Saujana", "Pintasan Saloma (Saloma Link)", "Jambatan Putra", "Jambatan Gombak"], ans: 1 },
+      { q: "Reka bentuk Pintasan Saloma diilhamkan daripada motif tradisi Melayu apa?", options: ["Tengkolok Raja", "Sirih Junjung", "Keris Alang", "Wau Bulan"], ans: 1 },
+      { q: "Stesen Keretapi Kuala Lumpur yang lama di Jalan Sultan Hishamuddin direka oleh arkitek kolonial bernama siapa?", options: ["Arthur Benison Hubback (A.B. Hubback)", "Norman Foster", "Cesar Pelli", "J.W.W. Birch"], ans: 0 },
+      { q: "Apakah nama kompleks sukan terbesar negara yang terletak di selatan Kuala Lumpur?", options: ["Kompleks Sukan Cheras", "Bandar Sukan KL (KL Sports City / Stadium Nasional Bukit Jalil)", "Kompleks Sukan Kg. Pandan", "Stadium Panasonic"], ans: 1 },
+      { q: "Apakah nama agensi pihak berkuasa tempatan yang mentadbir sepenuhnya Wilayah Persekutuan Kuala Lumpur?", options: ["MBPJ", "MBSA", "DBKL (Dewan Bandaraya Kuala Lumpur)", "MPAJ"], ans: 2 },
+      { q: "Di manakah terletaknya Menara DBKL 1, iaitu ibu pejabat utama Dewan Bandaraya Kuala Lumpur?", options: ["Jalan Raja Laut", "Jalan Tuanku Abdul Rahman", "Jalan Ampang", "Jalan Bukit Bintang"], ans: 0 },
+      { q: "Berapakah bilangan kawasan Parlimen yang terdapat dalam Wilayah Persekutuan Kuala Lumpur?", options: ["9 Parlimen", "10 Parlimen", "11 Parlimen", "13 Parlimen"], ans: 2 },
+      { q: "Antara berikut, yang manakah BUKAN salah satu kerusi Parlimen di dalam Wilayah Persekutuan Kuala Lumpur?", options: ["Lembah Pantai", "Batu", "Petaling Jaya", "Titiwangsa"], ans: 2 },
+      { q: "Hari Wilayah Persekutuan diraikan secara rasmi pada tarikh bila setiap tahun?", options: ["1 Januari", "1 Februari", "31 Ogos", "16 September"], ans: 1 },
+      { q: "Selain Kuala Lumpur, dua lagi kawasan yang membentuk Wilayah Persekutuan di Malaysia ialah?", options: ["Putrajaya dan Cyberjaya", "Putrajaya dan Labuan", "Labuan dan Langkawi", "Putrajaya dan Klang"], ans: 1 },
+      { q: "Kementerian manakah yang memayungi Jabatan Wilayah Persekutuan dalam struktur pentadbiran Persekutuan?", options: ["Jabatan Perdana Menteri", "Kementerian Perumahan & Kerajaan Tempatan", "Kementerian Dalam Negeri", "Kementerian Kerja Raya"], ans: 0 },
+      { q: "Apakah warna rasmi pada Jalur Bendera Wilayah Persekutuan?", options: ["Kuning, Biru, Hijau", "Kuning, Biru Tua, Merah", "Merah, Putih, Hitam", "Biru Muda, Kuning, Putih"], ans: 1 },
+      { q: "Apakah fungsi utama sistem terowong dwifungsi 'SMART Tunnel' di Kuala Lumpur?", options: ["Kawalan banjir kilat dan laluan trafik kenderaan", "Laluan tren bawah tanah dan kumbahan", "Kabel gentian optik dan bekalan air", "Laluan kecemasan kebakaran"], ans: 0 },
+      { q: "Terowong SMART dibina untuk mengalihkan lebihan air limpahan dari pertemuan sungai mana?", options: ["Sungai Klang dan Sungai Ampang", "Sungai Selangor dan Sungai Bernam", "Sungai Langat dan Sungai Semenyih", "Sungai Gombak dan Sungai Batu"], ans: 0 },
+      { q: "Apakah nama rancangan komprehensif pembangunan masa depan ibu kota yang digubal oleh DBKL?", options: ["Pelan Induk Lembah Klang", "Pelan Struktur Kuala Lumpur (PSKL)", "Wawasan KL Madani", "Blueprint Selangor-KL"], ans: 1 },
+      { q: "Zon riadah 'Car Free Morning' anjuran DBKL pada pagi Ahad biasanya bermula dari lokasi mana?", options: ["Dataran DBKL / Dataran Merdeka", "Taman Botani Perdana", "Titiwangsa", "Bukit Bintang"], ans: 0 },
+      { q: "Pusat Transformasi Bandar (UTC) pertama dan paling terkenal di Kuala Lumpur beroperasi di bangunan mana?", options: ["Kompleks Dayabumi", "Pudu Sentral (Puduraya)", "Medan Mara", "Plaza Rakyat"], ans: 1 },
+      { q: "Pusat rawatan perubatan kerajaan tertua dan terbesar yang terletak di Jalan Pahang, KL ialah?", options: ["Hospital Kuala Lumpur (HKL)", "Pusat Perubatan Universiti Malaya (PPUM)", "Hospital Canselor Tuanku Muhriz (HCTM)", "Institut Jantung Negara (IJN)"], ans: 0 },
+      { q: "Pusat pakar rawatan kardiovaskular terulung negara yang terletak bersebelahan HKL ialah?", options: ["Pusat Darah Negara", "Institut Kanser Negara", "Institut Jantung Negara (IJN)", "Hospital Columbia Asia"], ans: 2 },
+      { q: "Apakah nama taman tasik awam tertua di ibu kota Kuala Lumpur yang diasaskan pada 1888?", options: ["Taman Tasik Titiwangsa", "Taman Botani Perdana (Lake Gardens)", "Taman Metropolitan Kepong", "Taman Tasik Permaisuri"], ans: 1 },
+      { q: "Hutan simpan dara di tengah-tengah bandar raya KL yang terletak berhampiran Menara KL ialah?", options: ["Hutan Simpan Kota Damansara", "Hutan Simpan Bukit Nanas (KL Forest Eco Park)", "Hutan Simpan Ayer Hitam", "Taman Rimba Kiara"], ans: 1 },
+      { q: "Taman rekreasi di utara KL yang sangat popular untuk aktiviti bermain layang-layang ialah?", options: ["Taman Metropolitan Kepong", "Taman Tasik Ampang Hilir", "Taman Pudu Ulu", "Taman Lembah Kiara"], ans: 0 },
+      { q: "Taman tasik di Cheras yang dinamakan sempena Raja Permaisuri Agong ialah?", options: ["Taman Tasik Permaisuri", "Taman Tasik Shah Alam", "Taman Wetland", "Taman Saujana Hijau"], ans: 0 },
+      { q: "Taman awam di sekitar Menara Berkembar Petronas yang dilengkapi kolam air pancut berirama Simfoni Lake direka oleh siapa?", options: ["Roberto Burle Marx", "Cesar Pelli", "Frank Gehry", "Kenzo Tange"], ans: 0 },
+      { q: "Batu Caves yang terkenal dengan kuil gua batu kapur terletak di sempadan daerah Gombak dan berhampiran sempadan utara parlimen apa di KL?", options: ["Parlimen Batu", "Parlimen Segambut", "Parlimen Wangsa Maju", "Parlimen Seputeh"], ans: 0 },
+      { q: "Sungai Gombak bertemu dengan Sungai Klang berhampiran masjid bersejarah mana?", options: ["Masjid Negara", "Masjid Jamek Sultan Abdul Samad", "Masjid India", "Masjid Usamah Bin Zaid"], ans: 1 },
+      { q: "Taman Tasik Titiwangsa terkenal dengan pemandangan panoramik latar langit Kuala Lumpur dan berhampiran dengan panggung seni apa?", options: ["Istana Budaya", "KLPAC Sentul", "Dewan Filharmonik", "Damansara Performing Arts Centre"], ans: 0 },
+      { q: "Bukit yang menjadi kawasan penempatan eksklusif berhampiran Parlimen dan Pusat Bandar KL dinamakan?", options: ["Bukit Tunku (Kenny Hills)", "Bukit Jalil", "Bukit Bintang", "Bukit Kiara"], ans: 0 },
+      { q: "Taman Rimba Kiara dan Bukit Kiara merupakan kawasan hijau utama yang terletak di pinggir pinggiran bandar mana?", options: ["Taman Tun Dr Ismail (TTDI)", "Bandar Tun Razak", "Setiawangsa", "Kepong"], ans: 0 },
+      { q: "Pusat transit pengangkutan rel bersepadu terbesar di Kuala Lumpur dan Malaysia ialah?", options: ["KL Sentral", "Terminal Bersepadu Selatan (TBS)", "Pudu Sentral", "Stesen MRT Merdeka"], ans: 0 },
+      { q: "Terminal bas ekspres utama yang menghubungkan perjalanan bas antara bandar ke selatan, utara, dan pantai timur ialah?", options: ["TBS (Terminal Bersepadu Selatan)", "Pekeliling Bus Terminal", "Hentian Duta", "Medan Pasar"], ans: 0 },
+      { q: "Apakah perkhidmatan rel laju yang menghubungkan KL Sentral terus ke Lapangan Terbang Antarabangsa KL (KLIA)?", options: ["KLIA Ekspres", "KTM Komuter", "MRT Laluan Putrajaya", "LRT Laluan Kelana Jaya"], ans: 0 },
+      { q: "Sistem tren monorel di Kuala Lumpur mula beroperasi pada tahun berapa bersempena Hari Kebangsaan?", options: ["1998", "2000", "2003", "2008"], ans: 2 },
+      { q: "Laluan MRT pertama di Lembah Klang yang dibuka kepada orang ramai ialah?", options: ["MRT Laluan Kajang", "MRT Laluan Putrajaya", "MRT Laluan Lingkaran 3", "LRT Laluan Sri Petaling"], ans: 0 },
+      { q: "Stesen pertukaran bawah tanah yang menghubungkan MRT Laluan Kajang dan Laluan Putrajaya di pusat bandar KL ialah?", options: ["Stesen Tun Razak Exchange (TRX)", "Stesen Pasar Seni", "Stesen Bukit Bintang", "Stesen Maluri"], ans: 0 },
+      { q: "Apakah nama lebuh raya bertingkat moden yang merentasi kawasan Ampang dan Kuala Lumpur dengan pemandangan bukit?", options: ["SUKE (Sungai Besi-Ulu Kelang)", "KESAS", "LDP", "NPE"], ans: 0 },
+      { q: "Jalan utama di Kuala Lumpur yang terkenal dengan gedung kain, pakaian Melayu, dan bazar Ramadan ialah?", options: ["Jalan Tuanku Abdul Rahman (Jalan TAR)", "Jalan Sultan Ismail", "Jalan Imbi", "Jalan P. Ramlee"], ans: 0 },
+      { q: "Jalan manakah di pusat bandar Kuala Lumpur yang dinamakan sempena seniman agung negara?", options: ["Jalan P. Ramlee", "Jalan A.R. Tompel", "Jalan Saloma", "Jalan Sudirman"], ans: 0 },
+      { q: "Perkhidmatan bas percuma yang disediakan untuk kemudahan orang ramai mengelilingi pusat bandar KL dikenali sebagai?", options: ["GoKL City Bus", "RapidKL Transit", "Bas Muafakat", "Smart Selangor"], ans: 0 },
+      { q: "Stesen MRT Merdeka mempunyai laluan pejalan kaki bawah tanah berbumbung yang bersambung dengan stesen LRT apa?", options: ["Plaza Rakyat", "Hang Tuah", "Bandaraya", "Masjid Jamek"], ans: 0 },
+      { q: "Jalan Maarof merupakan jalan arteri utama yang merentasi kawasan perbandaran mana?", options: ["Bangsar", "Brickfields", "Cheras", "Segambut"], ans: 0 },
+      { q: "Kawasan Brickfields secara rasmi diisytiharkan sebagai hab kebudayaan komuniti India di KL dengan gelaran apa?", options: ["Little India", "Chinatown", "Heritage Village", "Indian Bazaar"], ans: 0 },
+      { q: "Apakah lebuh raya lingkaran dalam Kuala Lumpur yang menghubungkan Jalan Tun Razak dan Jalan Mahameru?", options: ["Lebuhraya Lingkaran Tengah 2 (MRR2)", "Lebuhraya Sultan Iskandar / Lingkaran Tengah 1 (MRR1)", "DUKE", "Sprint Highway"], ans: 1 },
+      { q: "Lapangan terbang manakah yang menjadi lapangan terbang antarabangsa utama Malaysia sebelum KLIA Sepang dibuka pada 1998?", options: ["Lapangan Terbang Antarabangsa Subang (Sultan Abdul Aziz Shah)", "Lapangan Terbang Simpang", "Lapangan Terbang Senai", "Lapangan Terbang Bayan Lepas"], ans: 0 },
+      { q: "Lorong manakah di Bukit Bintang yang paling masyhur sebagai hab makanan jalanan (street food) antarabangsa?", options: ["Jalan Alor", "Jalan Changkat", "Jalan Walter Grenier", "Jalan Mesui"], ans: 0 },
+      { q: "Pusat beli-belah mewah ikonik yang terletak di kaki Menara Berkembar Petronas ialah?", options: ["Suria KLCC", "Pavilion KL", "Mid Valley Megamall", "Starhill Gallery"], ans: 0 },
+      { q: "Panggung teater berprestij negara yang mempunyai reka bentuk bumbung berlipat sirih pinang di Jalan Tun Razak ialah?", options: ["Istana Budaya", "KLPAC", "Panggung Bandaraya DBKL", "Dewan Bandaraya"], ans: 0 },
+      { q: "Dewan konsert orkestra terkemuka yang terletak di antara dua menara Petronas di KLCC ialah?", options: ["Dewan Filharmonik Petronas (DFP)", "Auditorium DBKL", "Plenary Hall KLCC", "Axiata Hall"], ans: 0 },
+      { q: "Muzium kesenian Islam terbesar di Asia Tenggara yang terletak berhampiran Taman Botani Perdana ialah?", options: ["Muzium Kesenian Islam Malaysia (IAMM)", "Muzium Etnologi Dunia Melayu", "Muzium Tekstil Negara", "Muzium Diraja"], ans: 0 },
+      { q: "Bekas istana kediaman rasmi Yang di-Pertuan Agong di Jalan Istana kini dijadikan apa?", options: ["Muzium Diraja", "Galeri Petronas", "Pusat Konvensyen Kebangsaan", "Muzium Polis Diraja Malaysia"], ans: 0 },
+      { q: "Pusat sains interaktif yang terletak di dalam pusat beli-belah Suria KLCC ialah?", options: ["Pusat Sains Negara", "Petrosains, The Discovery Centre", "Planetarium Negara", "Aquaria KLCC"], ans: 1 },
+      { q: "Akuarium oseanarium bertaraf dunia yang terletak di Pusat Konvensyen Kuala Lumpur (KLCC) ialah?", options: ["Aquaria KLCC", "Underwater World", "Marine Life Park", "Sea Life"], ans: 0 },
+      { q: "Institusi pendidikan tinggi awam (IPTA) tertua di Malaysia yang kampusnya terletak di Lembah Pantai, KL ialah?", options: ["Universiti Malaya (UM)", "Universiti Kebangsaan Malaysia (UKM)", "Universiti Putra Malaysia (UPM)", "Universiti Teknologi Malaysia (UTM)"], ans: 0 },
+      { q: "Kampus cawangan tertua Universiti Teknologi Malaysia (UTM) di Kuala Lumpur terletak di jalan mana?", options: ["Jalan Sultan Yahya Petra (Jalan Semarak)", "Jalan Ampang", "Jalan Cheras", "Jalan Gombak"], ans: 0 },
+      { q: "Sekolah menengah mubaligh bersejarah yang melahirkan ramai tokoh negara dan terletak berhampiran Bukit Nanas ialah?", options: ["St. John's Institution", "Victoria Institution", "Methodist Boys' School", "Convent Bukit Nanas"], ans: 0 },
+      { q: "Sekolah menengah berasrama/harian bersejarah di Jalan Hang Tuah yang diasaskan pada 1893 ialah?", options: ["Victoria Institution (VI)", "Royal Military College", "Sekolah Alam Shah", "St. Michael Institution"], ans: 0 },
+      { q: "Planetarium Negara yang mempamerkan penerokaan angkasa lepas terletak di kawasan mana?", options: ["Taman Botani Perdana", "Taman Titiwangsa", "Bukit Bintang", "Pusat Sains Bukit Damansara"], ans: 0 },
+      { q: "Pusat Sains Negara dengan kubah berwarna-warni terletak di kawasan perumahan mana di KL?", options: ["Bukit Damansara", "Bangsar South", "Wangsa Maju", "Bandar Tun Razak"], ans: 0 },
+      { q: "Taman burung terbuka bertaraf dunia di Taman Tasik Perdana yang menempatkan ribuan spesies burung ialah?", options: ["KL Bird Park (Taman Burung KL)", "Jurong Bird Park", "Taman Burung Melaka", "Zoo Negara Aviary"], ans: 0 },
+      { q: "Bangunan muzium di Dataran Merdeka yang mempamerkan seni tenunan, batik, dan songket tradisional Malaysia ialah?", options: ["Muzium Tekstil Negara", "Muzium Muzik", "Muzium Seni Kraf Orang Asli", "Balai Seni Negara"], ans: 0 },
+      { q: "Galeri seni visual persekutuan yang terletak berhampiran Tasik Titiwangsa di Jalan Temerloh ialah?", options: ["Balai Seni Negara (National Art Gallery)", "Ilham Gallery", "Wei-Ling Gallery", "Galeri Shah Alam"], ans: 0 },
+      { q: "Pasar makanan basah dan sarapan ikonik di pinggir bandar KL yang terkenal dengan makanan autentik tempatan ialah?", options: ["Pasar Pudu", "Pasar Sentul", "Pasar Chow Kit (Bazar Baru Chow Kit)", "Pasar Keramat"], ans: 2 },
+      { q: "Hab tumpuan barangan elektronik dan gajet komputer terkenal di Bukit Bintang sejak era 1990-an ialah?", options: ["Plaza Low Yat", "Sungei Wang Plaza", "Lot 10", "Berjaya Times Square"], ans: 0 },
+      { q: "Kompleks beli-belah gergasi di Jalan Imbi yang terkenal dengan taman tema permainan 'indoor' dan 'roller coaster' ialah?", options: ["Berjaya Times Square", "Mid Valley Megamall", "Pavilion Bukit Jalil", "MyTOWN Shopping Centre"], ans: 0 }
     ];
 
     const CONFIG = {
@@ -508,7 +563,6 @@
       crowStreakText.textContent = `${crowStreak}/${CONFIG.CROWS_PER_QUIZ}`;
     }
 
-    // Paparkan Kuiz Rawak KL secara tepat
     function triggerRandomKLQuiz() {
       isPausedForQuiz = true;
       clearInterval(moveTimer);
@@ -531,7 +585,6 @@
         quizOptions.appendChild(btn);
       });
 
-      // Paksa papar modal melalui inline style display
       quizModal.style.display = 'flex';
     }
 
@@ -555,7 +608,6 @@
         quizFeedback.className = "text-xs font-bold text-rose-400 min-h-[18px] mt-2";
       }
 
-      // Set semula kiraan gagak kepada 0
       crowStreak = 0;
       updateCrowStreakDisplay();
 
@@ -620,14 +672,13 @@
       const clickY = clientY - rect.top;
       spawnHitPopup(clickX, clickY, targetData.points, targetData.color);
 
-      // Semakan kalis ralat bagi tembakan gagak
       if (isCrow || targetData.key === 'CROW') {
         crowStreak++;
         updateCrowStreakDisplay();
 
         if (crowStreak >= CONFIG.CROWS_PER_QUIZ) {
           triggerRandomKLQuiz();
-          return; // Hentikan di sini agar sasaran tidak berganti serentak
+          return;
         }
       }
 
