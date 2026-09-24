@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#020617" />
   <title>Jabatan Challenge — Ops Tembak Gagak</title>
-  
+
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     html, body {
@@ -70,7 +70,7 @@
 
   <!-- Arena Permainan -->
   <main id="gameArena" class="w-full max-w-xl flex-1 min-h-[260px] max-h-[52dvh] bg-gradient-to-b from-slate-900 via-indigo-950/70 to-slate-900 rounded-2xl sm:rounded-3xl border border-slate-800 relative overflow-hidden shadow-inner cursor-crosshair-custom touch-none">
-    
+
     <!-- Penunjuk Bilangan Gagak Tertembak -->
     <div class="absolute top-2.5 left-3 bg-slate-950/85 border border-slate-700/80 px-2.5 py-1 rounded-full text-[11px] font-bold text-slate-200 z-10 flex items-center gap-1.5 shadow">
       <span>🐦‍⬛</span>
@@ -114,7 +114,7 @@
     <div id="gameOverScreen" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md hidden flex flex-col items-center justify-center p-4 sm:p-6 text-center z-20">
       <span class="text-rose-500 font-black text-2xl sm:text-3xl mb-1 tracking-wider">OPS TAMAT!</span>
       <p class="text-xs sm:text-sm text-slate-400 mb-3">Rekod markah anda terus ke pangkalan data utama.</p>
-      
+
       <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-2 sm:py-3 mb-4 w-full max-w-xs">
         <span class="text-[10px] sm:text-xs uppercase text-slate-400 font-bold block">Markah Akhir</span>
         <span id="finalScoreVal" class="text-3xl sm:text-4xl font-black text-amber-400 font-mono">0</span>
@@ -189,7 +189,7 @@
 
   <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPtVrKnBwS1gQ1NRo18Ok4Eh6_Mejstgz_ujX8nVZCio4Rd-totXe2ajCVT3r5rJpf/exec";
-    
+
     // Bank 100 Soalan Kuala Lumpur
     const KL_QUESTIONS = [
       { q: "Apakah maksud asal perkataan 'Kuala Lumpur'?", options: ["Pertemuan sungai berlumpur", "Lembah bukit hijau", "Pekan bijih timah", "Pelabuhan dagang utama"], ans: 0 },
@@ -445,10 +445,12 @@
               <span class="w-4 text-center font-bold text-[10px] ${idx < 3 ? '' : 'text-slate-500'}">
                 ${badges[idx] || '#' + (idx + 1)}
               </span>
-              <span class="text-slate-200 font-medium text-xs truncate">${escapeHtml(item.name)}</span>
+              <div class="flex flex-col truncate">
+                <span class="text-slate-200 font-medium text-xs truncate">${escapeHtml(item.name)}</span>
+                <span class="text-[9px] text-slate-500 font-mono leading-tight">${escapeHtml(item.time || item.timestamp || item.date || '-')}</span>
+              </div>
             </div>
             <div class="flex items-center gap-2 shrink-0">
-              <span class="text-[9px] text-slate-500 hidden sm:inline">${item.time || ''}</span>
               <span class="font-mono font-bold text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded text-xs border border-amber-400/20">
                 ${item.score} pts
               </span>
@@ -528,7 +530,7 @@
       if (!isPlaying || isPausedForQuiz) return;
 
       const selectedPair = PAIR_PRESETS[Math.floor(Math.random() * PAIR_PRESETS.length)];
-      
+
       if (Math.random() > 0.5) {
         slot1Data = selectedPair[0];
         slot2Data = selectedPair[1];
@@ -700,7 +702,7 @@
       if (timeLeft <= 10 && currentSpeed !== CONFIG.FRENZY_SPEED_MS) {
         currentSpeed = CONFIG.FRENZY_SPEED_MS;
         resetMoveTimer(currentSpeed);
-        
+
         frenzyBadge.classList.remove('hidden');
         targetBtn1.classList.add('target-fast');
         targetBtn2.classList.add('target-fast');
@@ -734,7 +736,7 @@
       const rect = arena.getBoundingClientRect();
       const clientX = (e && e.clientX) || (e && e.touches && e.touches[0] && e.touches[0].clientX) || (rect.left + rect.width / 2);
       const clientY = (e && e.clientY) || (e && e.touches && e.touches[0] && e.touches[0].clientY) || (rect.top + rect.height / 2);
-      
+
       const clickX = clientX - rect.left;
       const clickY = clientY - rect.top;
       spawnHitPopup(clickX, clickY, targetData.points, targetData.color);
