@@ -231,7 +231,7 @@
       NORMAL_SPEED_MS: 900,
       FRENZY_SPEED_MS: 500,
       BONUS_POINTS: 20,
-      QUIZ_PENALTY: 5, // Penalti markah jika kuiz salah/tamat masa
+      QUIZ_PENALTY: 5,
       CROWS_PER_QUIZ: 3,
       TARGET_TYPES: {
         CROW: { key: 'CROW', emoji: '🐦‍⬛', points: 10, color: 'text-emerald-400' },
@@ -383,7 +383,7 @@
               </div>
             </div>
             <div class="flex items-center gap-2 shrink-0">
-              <span class="font-mono font-bold text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded text-xs border border-amber-400/20">
+              <span class="font-mono font-bold ${Number(item.score) < 0 ? 'text-rose-400 bg-rose-400/10 border-rose-400/20' : 'text-amber-400 bg-amber-400/10 border-amber-400/20'} px-1.5 py-0.5 rounded text-xs border">
                 ${item.score} pts
               </span>
             </div>
@@ -543,7 +543,7 @@
 
       quizModal.style.display = 'flex';
 
-      // Mulakan kiraan 15 saat kuiz
+      // Kiraan 15 saat kuiz
       quizTimer = setInterval(() => {
         quizTimeLeft--;
         quizTimerText.textContent = `${quizTimeLeft}s`;
@@ -571,13 +571,13 @@
         }
       });
 
-      // Penalti tolak 5 markah sekiranya tamat masa
-      score = Math.max(0, score - CONFIG.QUIZ_PENALTY);
+      // Tolak 5 markah tanpa sekatan (boleh negatif)
+      score -= CONFIG.QUIZ_PENALTY;
       scoreText.textContent = score;
       spawnHitPopup(arena.clientWidth / 2 - 20, arena.clientHeight / 2 - 20, -CONFIG.QUIZ_PENALTY, 'text-rose-500');
       playTone('BIRD');
 
-      quizFeedback.textContent = `Masa menjawab tamat! -${CONFIG.QUIZ_PENALTY} Pts. ⏳`;
+      quizFeedback.textContent = `Masa tamat! -${CONFIG.QUIZ_PENALTY} Pts. ⏳`;
       quizFeedback.className = "text-xs font-bold text-rose-400 min-h-[18px] mt-2";
 
       crowStreak = 0;
@@ -594,7 +594,7 @@
       const allButtons = quizOptions.querySelectorAll('button');
       allButtons.forEach((b, idx) => {
         b.disabled = true;
-        if (!isCorrect && idx === correctIndex) {
+        if (!isCorrect && Number(idx) === Number(correctIndex)) {
           b.className = "w-full text-left bg-emerald-600/70 border border-emerald-400 text-white text-xs py-2.5 px-3 rounded-xl font-semibold";
         }
       });
@@ -615,11 +615,10 @@
         quizFeedback.className = "text-xs font-bold text-rose-400 min-h-[18px] mt-2";
         playTone('BIRD');
 
-        // Tolak 5 markah dan pastikan skor minimum 0
-        score = Math.max(0, score - CONFIG.QUIZ_PENALTY);
+        // Tolak terus 5 markah tanpa batas minimum (membenarkan markah negatif)
+        score -= CONFIG.QUIZ_PENALTY;
         scoreText.textContent = score;
 
-        // Popup tolak markah di tengah arena
         spawnHitPopup(arena.clientWidth / 2 - 20, arena.clientHeight / 2 - 20, -CONFIG.QUIZ_PENALTY, 'text-rose-500');
       }
 
@@ -675,8 +674,8 @@
 
       playTone(targetData.key);
 
+      // Skor dibenarkan menjadi negatif tanpa sekatan
       score += targetData.points;
-      if (score < 0) score = 0;
       scoreText.textContent = score;
 
       const rect = arena.getBoundingClientRect();
@@ -758,7 +757,7 @@
     saveScoreBtn.addEventListener('click', submitScoreToSheet);
     refreshBoardBtn.addEventListener('click', fetchTop10Leaderboard);
 
-    // Memastikan hanya digit dibenarkan secara masa nyata (termasuk kes paste teks)
+    // Memastikan hanya digit dibenarkan bagi nombor pekerja
     playerNameInput.addEventListener('input', (e) => {
       e.target.value = e.target.value.replace(/[^0-9]/g, '');
     });
