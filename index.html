@@ -73,7 +73,7 @@
 
     <!-- Penunjuk Bilangan Gagak Tertembak -->
     <div class="absolute top-2.5 left-3 bg-slate-950/85 border border-slate-700/80 px-2.5 py-1 rounded-full text-[11px] font-bold text-slate-200 z-10 flex items-center gap-1.5 shadow">
-      <span>🐦‍‍⬛</span>
+      <span>🐦‍⬛</span>
       <span>Gagak:</span>
       <span id="crowStreakText" class="text-amber-400 font-mono font-black">0/3</span>
     </div>
@@ -98,12 +98,12 @@
       <div class="flex gap-2 text-5xl sm:text-6xl mb-2 animate-bounce">
         <span>🐦‍⬛</span><span>🕊️</span><span>💣</span>
       </div>
-      <h2 class="text-lg sm:text-2xl font-black text-white mb-2">Ops Kawalan Gagak </h2>
+      <h2 class="text-lg sm:text-2xl font-black text-white mb-2">Ops Kawalan Gagak</h2>
       <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 mb-4 text-xs text-slate-300 max-w-xs space-y-1.5 text-left">
         <p class="flex items-center justify-between"><span>🐦‍⬛ Gagak Bandar:</span> <span class="font-bold text-emerald-400">+10 Pts</span></p>
         <p class="flex items-center justify-between"><span>🕊️ Merpati Dilindungi:</span> <span class="font-bold text-rose-400">-10 Pts</span></p>
         <p class="flex items-center justify-between"><span>💣 Bahan Letupan:</span> <span class="font-bold text-rose-500">-15 Pts</span></p>
-        <p class="text-[10px] text-amber-300/90 pt-1 border-t border-slate-800 italic">💡 Tembak <b>3 ekor gagak</b> untuk membuka soalan kuiz bonus KL (+20 Pts, masa 15s)!</p>
+        <p class="text-[10px] text-amber-300/90 pt-1 border-t border-slate-800 italic">💡 Tembak <b>3 ekor gagak</b> untuk kuiz bonus (+20 Pts, salah -5 Pts, masa 15s)!</p>
       </div>
       <button id="startGameBtn" type="button" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-black py-2.5 px-7 sm:py-3 sm:px-8 rounded-xl shadow-lg transform active:scale-95 transition text-sm sm:text-base cursor-pointer">
         MULA OPS (60s)
@@ -174,7 +174,7 @@
     <div class="w-full max-w-sm bg-slate-900 border-2 border-amber-500 rounded-2xl p-5 shadow-2xl relative text-center">
       <div class="flex items-center justify-between gap-2 mb-3">
         <span class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-black uppercase px-2.5 py-1 rounded-full tracking-wide">
-          ⚡ BONUS KUIZ (+20 PTS)
+          ⚡ BONUS KUIZ (+20 / -5 PTS)
         </span>
         <span class="bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[11px] font-black font-mono px-2.5 py-1 rounded-full flex items-center gap-1">
           ⏳ <span id="quizTimerText">15s</span>
@@ -231,6 +231,7 @@
       NORMAL_SPEED_MS: 900,
       FRENZY_SPEED_MS: 500,
       BONUS_POINTS: 20,
+      QUIZ_PENALTY: 5, // Penalti markah jika kuiz salah/tamat masa
       CROWS_PER_QUIZ: 3,
       TARGET_TYPES: {
         CROW: { key: 'CROW', emoji: '🐦‍⬛', points: 10, color: 'text-emerald-400' },
@@ -570,7 +571,13 @@
         }
       });
 
-      quizFeedback.textContent = "Masa menjawab tamat! Tiada markah bonus.";
+      // Penalti tolak 5 markah sekiranya tamat masa
+      score = Math.max(0, score - CONFIG.QUIZ_PENALTY);
+      scoreText.textContent = score;
+      spawnHitPopup(arena.clientWidth / 2 - 20, arena.clientHeight / 2 - 20, -CONFIG.QUIZ_PENALTY, 'text-rose-500');
+      playTone('BIRD');
+
+      quizFeedback.textContent = `Masa menjawab tamat! -${CONFIG.QUIZ_PENALTY} Pts. ⏳`;
       quizFeedback.className = "text-xs font-bold text-rose-400 min-h-[18px] mt-2";
 
       crowStreak = 0;
@@ -604,8 +611,16 @@
         spawnHitPopup(arena.clientWidth / 2 - 20, arena.clientHeight / 2 - 20, CONFIG.BONUS_POINTS, 'text-emerald-400');
       } else {
         clickedBtn.className = "w-full text-left bg-rose-600 border border-rose-400 text-white text-xs py-2.5 px-3 rounded-xl font-bold transition";
-        quizFeedback.textContent = "Kurang Tepat! Tiada markah bonus.";
+        quizFeedback.textContent = `Kurang Tepat! -${CONFIG.QUIZ_PENALTY} Pts. ❌`;
         quizFeedback.className = "text-xs font-bold text-rose-400 min-h-[18px] mt-2";
+        playTone('BIRD');
+
+        // Tolak 5 markah dan pastikan skor minimum 0
+        score = Math.max(0, score - CONFIG.QUIZ_PENALTY);
+        scoreText.textContent = score;
+
+        // Popup tolak markah di tengah arena
+        spawnHitPopup(arena.clientWidth / 2 - 20, arena.clientHeight / 2 - 20, -CONFIG.QUIZ_PENALTY, 'text-rose-500');
       }
 
       crowStreak = 0;
