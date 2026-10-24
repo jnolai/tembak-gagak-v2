@@ -105,7 +105,7 @@
         <p class="flex items-center justify-between"><span>💣 Bahan Letupan:</span> <span class="font-bold text-rose-500">-15 Pts</span></p>
         <p class="text-[10px] text-amber-300/90 pt-1 border-t border-slate-800 italic">💡 Tembak <b>3 ekor gagak</b> untuk kuiz bonus (+20 Pts, salah -5 Pts, masa 15s)!</p>
       </div>
-      <button id="startGameBtn" type="button" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-black py-2.5 px-7 sm:py-3 sm:px-8 rounded-xl shadow-lg transform active:scale-95 transition text-sm sm:text-base cursor-pointer">
+      <button id="startGameBtn" type="button" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-black py-2.5 px-7 sm:py-3 sm:px-8 rounded-xl shadow-lg transform active:scale-95 transition text-sm sm:base cursor-pointer">
         MULA OPS (60s)
       </button>
     </div>
@@ -199,9 +199,9 @@
   <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxisPL5gkx98dVYXRbTq--BUXjo_RuIBWxBvLkyPnj5VGARKnqVnkzyeU056wnqXAYryA/exec";
 
-    // Bank Soalan berdasarkan PDF "BANK SOALAN E-GAME"
+    // Bank Soalan lengkap berdasarkan PDF "BANK SOALAN E-GAME" (35 Soalan)
     const KL_QUESTIONS = [
-     { q: "1. Apakah hasil terbesar dalam DBKL?", options: ["Caj pembangunan", "Kadar taksiran", "Lesen perniagaan", "Sewaan harta datuk bandar"], ans: 1 },
+      { q: "1. Apakah hasil terbesar dalam DBKL?", options: ["Caj pembangunan", "Kadar taksiran", "Lesen perniagaan", "Sewaan harta datuk bandar"], ans: 1 },
       { q: "2. Siapakah nama Datuk Bandar Kuala Lumpur yang ke 15?", options: ["Datuk Seri Fadlun Mak Ujud", "Datuk Seri Mahadi Che Ngah", "Datuk Haji Kamarulzaman Mat Salleh", "Datuk Seri Dr. Maimunah Mohd Sharif"], ans: 3 },
       { q: "3. Di manakah letaknya Unit Penswastaan dan Takaful, JKEW?", options: ["Tingkat 1 Menara 1", "Tingkat 14 Menara 2", "Tingkat 6 Menara 2", "Tingkat 14 Menara 1"], ans: 2 },
       { q: "4. Portal yang boleh digunakan untuk membayar cukai taksiran", options: ["Bayar@KL", "DBayar", "DBKLBayar", "Tempah@KL"], ans: 0 },
@@ -384,24 +384,30 @@
         topScoreText.textContent = data[0].score || 0;
         const badges = ['🥇', '🥈', '🥉'];
 
-        leaderboardList.innerHTML = data.slice(0, 10).map((item, idx) => `
-          <li class="flex items-center justify-between bg-slate-950/80 px-2.5 py-1.5 rounded-lg border border-slate-800">
-            <div class="flex items-center gap-2 truncate pr-2">
-              <span class="w-4 text-center font-bold text-[10px] ${idx < 3 ? '' : 'text-slate-500'}">
-                ${badges[idx] || '#' + (idx + 1)}
-              </span>
-              <div class="flex flex-col truncate">
-                <span class="text-slate-200 font-medium text-xs truncate">${escapeHtml(item.name)}</span>
-                <span class="text-[9px] text-slate-500 font-mono leading-tight">${escapeHtml(item.time || item.timestamp || item.date || '-')}</span>
+        leaderboardList.innerHTML = data.slice(0, 10).map((item, idx) => {
+          const isNegative = Number(item.score) < 0;
+          // Markah negatif dipaparkan simbol ❌, positif/sifar dipaparkan pingat atau giliran kedudukan
+          const rankDisplay = isNegative ? '❌' : (badges[idx] || '#' + (idx + 1));
+
+          return `
+            <li class="flex items-center justify-between bg-slate-950/80 px-2.5 py-1.5 rounded-lg border border-slate-800">
+              <div class="flex items-center gap-2 truncate pr-2">
+                <span class="w-5 text-center font-bold text-xs ${!isNegative && idx < 3 ? '' : 'text-slate-500'}">
+                  ${rankDisplay}
+                </span>
+                <div class="flex flex-col truncate">
+                  <span class="text-slate-200 font-medium text-xs truncate">${escapeHtml(item.name)}</span>
+                  <span class="text-[9px] text-slate-500 font-mono leading-tight">${escapeHtml(item.time || item.timestamp || item.date || '-')}</span>
+                </div>
               </div>
-            </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <span class="font-mono font-bold ${Number(item.score) < 0 ? 'text-rose-400 bg-rose-400/10 border-rose-400/20' : 'text-amber-400 bg-amber-400/10 border-amber-400/20'} px-1.5 py-0.5 rounded text-xs border">
-                ${item.score} pts
-              </span>
-            </div>
-          </li>
-        `).join('');
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="font-mono font-bold ${isNegative ? 'text-rose-400 bg-rose-400/10 border-rose-400/20' : 'text-amber-400 bg-amber-400/10 border-amber-400/20'} px-1.5 py-0.5 rounded text-xs border">
+                  ${item.score} pts
+                </span>
+              </div>
+            </li>
+          `;
+        }).join('');
 
       } catch (err) {
         console.error("Ralat Leaderboard:", err);
@@ -584,7 +590,6 @@
         }
       });
 
-      // Tolak 5 markah tanpa sekatan (boleh negatif)
       score -= CONFIG.QUIZ_PENALTY;
       scoreText.textContent = score;
       spawnHitPopup(arena.clientWidth / 2 - 20, arena.clientHeight / 2 - 20, -CONFIG.QUIZ_PENALTY, 'text-rose-500');
@@ -628,7 +633,6 @@
         quizFeedback.className = "text-xs font-bold text-rose-400 min-h-[18px] mt-2";
         playTone('BIRD');
 
-        // Tolak terus 5 markah tanpa batas minimum (membenarkan markah negatif)
         score -= CONFIG.QUIZ_PENALTY;
         scoreText.textContent = score;
 
@@ -687,7 +691,6 @@
 
       playTone(targetData.key);
 
-      // Skor dibenarkan menjadi negatif tanpa sekatan
       score += targetData.points;
       scoreText.textContent = score;
 
@@ -770,7 +773,6 @@
     saveScoreBtn.addEventListener('click', submitScoreToSheet);
     refreshBoardBtn.addEventListener('click', fetchTop10Leaderboard);
 
-    // Memastikan hanya digit dibenarkan bagi nombor pekerja
     playerNameInput.addEventListener('input', (e) => {
       e.target.value = e.target.value.replace(/[^0-9]/g, '');
     });
