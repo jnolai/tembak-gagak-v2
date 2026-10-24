@@ -93,6 +93,25 @@
       ⚠️ KECEMASAN: 10S TERAKHIR!
     </div>
 
+    <!-- Skrin Kunci Sebelum Waktu Mula Ditetapkan Admin -->
+    <div id="lockedScreen" class="absolute inset-0 bg-slate-950/95 backdrop-blur-md hidden flex flex-col items-center justify-center p-4 sm:p-6 text-center z-30">
+      <div class="text-4xl sm:text-5xl mb-2 animate-bounce">🔒</div>
+      <h2 class="text-base sm:text-xl font-black text-amber-400 mb-1 tracking-wide">OPS BELUM BERMULA</h2>
+      <p class="text-xs text-slate-300 max-w-xs mb-3 font-medium">Permainan ini dikunci oleh pihak pentadbir sehingga waktu rasmi pelancaran.</p>
+      
+      <!-- Paparan Tarikh Waktu Buka -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 mb-3 w-full max-w-xs">
+        <span class="text-[10px] uppercase text-slate-400 font-bold block">Waktu Mula Ditetapkan</span>
+        <span id="lockTargetTimeText" class="text-xs sm:text-sm font-bold text-slate-100 font-mono">-</span>
+      </div>
+
+      <!-- Kiraan Detik (Countdown) -->
+      <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-2 w-full max-w-xs">
+        <span class="text-[10px] uppercase text-amber-400 font-bold block mb-1">Akan Dibuka Dalam Masa</span>
+        <span id="lockCountdownText" class="text-xl sm:text-2xl font-black text-amber-400 font-mono tracking-wider">00:00:00</span>
+      </div>
+    </div>
+
     <!-- Skrin Mula -->
     <div id="startScreen" class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-6 text-center z-20">
       <div class="flex gap-2 text-5xl sm:text-6xl mb-2 animate-bounce">
@@ -105,7 +124,7 @@
         <p class="flex items-center justify-between"><span>💣 Bahan Letupan:</span> <span class="font-bold text-rose-500">-15 Pts</span></p>
         <p class="text-[10px] text-amber-300/90 pt-1 border-t border-slate-800 italic">💡 Tembak <b>3 ekor gagak</b> untuk kuiz bonus (+20 Pts, salah -5 Pts, masa 15s)!</p>
       </div>
-      <button id="startGameBtn" type="button" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-black py-2.5 px-7 sm:py-3 sm:px-8 rounded-xl shadow-lg transform active:scale-95 transition text-sm sm:base cursor-pointer">
+      <button id="startGameBtn" type="button" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 disabled:opacity-40 disabled:cursor-not-allowed text-slate-950 font-black py-2.5 px-7 sm:py-3 sm:px-8 rounded-xl shadow-lg transform active:scale-95 transition text-sm sm:text-base cursor-pointer">
         MULA OPS (60s)
       </button>
     </div>
@@ -202,7 +221,7 @@
       <div class="text-4xl mb-2">🛑</div>
       <h3 class="text-base font-black text-rose-400 mb-2">HAD REKOD TERCAPAI</h3>
       <p class="text-xs text-slate-200 mb-5 leading-relaxed font-medium">
-        Anda telah merekodkan markah permainan sebanyak x5. Anda telah mencapai had maksimum simpanan markah, Terima Kasih kerana bermain Tembak Gagak.
+        Had rekod markah permainan anda telah mencapai maksimum, Terima Kasih kerana bermain Tembak Gagak.
       </p>
       <button id="closeLimitModalBtn" type="button" class="w-full bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-100 font-bold py-2.5 px-4 rounded-xl border border-slate-700 hover:border-slate-500 transition text-xs cursor-pointer">
         Tutup
@@ -211,6 +230,13 @@
   </div>
 
   <script>
+    // =========================================================================
+    // ⚙️ TETAPAN PENTADBIR (ADMIN CONFIG)
+    // Sila tukar tarikh & masa di bawah mengikut waktu rasmi pembukaan permainan.
+    // Format: "YYYY-MM-DDTHH:mm:ss" (Contoh: "2026-10-25T09:00:00")
+    // =========================================================================
+    const ADMIN_START_TIME = new Date("2026-10-25T09:00:00").getTime();
+
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxisPL5gkx98dVYXRbTq--BUXjo_RuIBWxBvLkyPnj5VGARKnqVnkzyeU056wnqXAYryA/exec";
 
     // Bank Soalan lengkap berdasarkan PDF "BANK SOALAN E-GAME" (35 Soalan)[cite: 1, 2]
@@ -286,7 +312,7 @@
 
     let slot1Data = null;
     let slot2Data = null;
-    let rawLeaderboardData = []; // Menyimpan keseluruhan rekod pangkalan data
+    let rawLeaderboardData = [];
 
     const targetBtn1 = document.getElementById('targetBtn1');
     const targetBtn2 = document.getElementById('targetBtn2');
@@ -308,6 +334,13 @@
     const leaderboardList = document.getElementById('leaderboardList');
     const refreshBoardBtn = document.getElementById('refreshBoardBtn');
 
+    // Elemen Kawalan Waktu & Had
+    const lockedScreen = document.getElementById('lockedScreen');
+    const lockTargetTimeText = document.getElementById('lockTargetTimeText');
+    const lockCountdownText = document.getElementById('lockCountdownText');
+    const limitModal = document.getElementById('limitModal');
+    const closeLimitModalBtn = document.getElementById('closeLimitModalBtn');
+
     // Elemen Kuiz
     const quizModal = document.getElementById('quizModal');
     const quizQuestion = document.getElementById('quizQuestion');
@@ -316,13 +349,42 @@
     const quizTimerText = document.getElementById('quizTimerText');
     const quizProgressBar = document.getElementById('quizProgressBar');
 
-    // Elemen Modal Had Simpanan
-    const limitModal = document.getElementById('limitModal');
-    const closeLimitModalBtn = document.getElementById('closeLimitModalBtn');
     if (closeLimitModalBtn) {
       closeLimitModalBtn.onclick = () => {
         limitModal.style.display = 'none';
       };
+    }
+
+    // Semakan Tarikh & Masa Mula Ditetapkan Admin
+    let lockCheckInterval = null;
+    function checkGameAccessibility() {
+      const now = new Date().getTime();
+      const difference = ADMIN_START_TIME - now;
+
+      if (lockTargetTimeText) {
+        lockTargetTimeText.textContent = new Date(ADMIN_START_TIME).toLocaleString('ms-MY', {
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        });
+      }
+
+      if (difference > 0) {
+        lockedScreen.classList.remove('hidden');
+        startGameBtn.disabled = true;
+
+        const totalHours = Math.floor(difference / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        const pad = (n) => String(n).padStart(2, '0');
+        lockCountdownText.textContent = `${pad(totalHours)}:${pad(minutes)}:${pad(seconds)}`;
+      } else {
+        lockedScreen.classList.add('hidden');
+        startGameBtn.disabled = false;
+        if (lockCheckInterval) {
+          clearInterval(lockCheckInterval);
+        }
+      }
     }
 
     let audioCtx = null;
@@ -406,7 +468,7 @@
           return;
         }
 
-        // Tapis supaya no. pekerja yang sama hanya memaparkan markah TERTINGGI sahaja[cite: 4]
+        // Tapisan: No. Pekerja yang sama hanya mengambil markah TERTINGGI[cite: 4]
         const bestScoresMap = new Map();
         rawLeaderboardData.forEach(item => {
           const id = String(item.name || '').trim();
@@ -422,7 +484,6 @@
           }
         });
 
-        // Susun daripada markah tertinggi ke terendah
         const uniqueRankedList = Array.from(bestScoresMap.values()).sort((a, b) => Number(b.score) - Number(a.score));
 
         topScoreText.textContent = uniqueRankedList.length > 0 ? uniqueRankedList[0].score : '0';
@@ -430,7 +491,7 @@
 
         leaderboardList.innerHTML = uniqueRankedList.slice(0, 10).map((item, idx) => {
           const isNegative = Number(item.score) < 0;
-          // Markah negatif dipaparkan simbol ❌, positif/sifar dipaparkan pingat (1-3) atau giliran kedudukan[cite: 3]
+          // Markah negatif dipaparkan ❌[cite: 3]
           const rankDisplay = isNegative ? '❌' : (badges[idx] || '#' + (idx + 1));
 
           return `
@@ -463,10 +524,9 @@
       const rawName = playerNameInput.value.trim();
       const name = rawName.length > 0 ? rawName : 'Pemain Anon';
 
-      // Semak bilangan kali no. pekerja telah disimpan dalam pangkalan data
+      // Semakan: Had simpanan maksimum 5 kali bagi No. Pekerja yang sama
       const existingPlays = rawLeaderboardData.filter(item => String(item.name || '').trim() === name).length;
 
-      // Sekiranya telah mencecah 5 kali, paparkan pop-up amaran dan halang simpanan ke-6
       if (existingPlays >= 5) {
         limitModal.style.display = 'flex';
         saveStatusMsg.textContent = "Had 5 kali cubaan telah dipenuhi.";
@@ -841,6 +901,9 @@
       if (e.target === arena) initAudio();
     });
 
+    // Mulakan semakan waktu & senarai rekod
+    lockCheckInterval = setInterval(checkGameAccessibility, 1000);
+    checkGameAccessibility();
     fetchTop10Leaderboard();
   </script>
 </body>
