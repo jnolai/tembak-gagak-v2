@@ -196,10 +196,24 @@
     </div>
   </div>
 
+  <!-- MODAL HAD MAKSIMUM SIMPAN (5 KALI) -->
+  <div id="limitModal" style="display: none;" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md items-center justify-center p-4 z-[10000]">
+    <div class="w-full max-w-sm bg-slate-900 border-2 border-rose-500 rounded-2xl p-5 shadow-2xl relative text-center">
+      <div class="text-4xl mb-2">🛑</div>
+      <h3 class="text-base font-black text-rose-400 mb-2">HAD REKOD TERCAPAI</h3>
+      <p class="text-xs text-slate-200 mb-5 leading-relaxed font-medium">
+        Had rekod markah permainan anda telah mencapai maksimum, Terima Kasih kerana bermain Tembak Gagak.
+      </p>
+      <button id="closeLimitModalBtn" type="button" class="w-full bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-100 font-bold py-2.5 px-4 rounded-xl border border-slate-700 hover:border-slate-500 transition text-xs cursor-pointer">
+        Tutup
+      </button>
+    </div>
+  </div>
+
   <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxisPL5gkx98dVYXRbTq--BUXjo_RuIBWxBvLkyPnj5VGARKnqVnkzyeU056wnqXAYryA/exec";
 
-    // Bank Soalan lengkap berdasarkan PDF "BANK SOALAN E-GAME" (35 Soalan)
+    // Bank Soalan lengkap berdasarkan PDF "BANK SOALAN E-GAME" (35 Soalan)[cite: 1, 2]
     const KL_QUESTIONS = [
       { q: "1. Apakah hasil terbesar dalam DBKL?", options: ["Caj pembangunan", "Kadar taksiran", "Lesen perniagaan", "Sewaan harta datuk bandar"], ans: 1 },
       { q: "2. Siapakah nama Datuk Bandar Kuala Lumpur yang ke 15?", options: ["Datuk Seri Fadlun Mak Ujud", "Datuk Seri Mahadi Che Ngah", "Datuk Haji Kamarulzaman Mat Salleh", "Datuk Seri Dr. Maimunah Mohd Sharif"], ans: 3 },
@@ -272,6 +286,7 @@
 
     let slot1Data = null;
     let slot2Data = null;
+    let rawLeaderboardData = []; // Menyimpan keseluruhan rekod pangkalan data
 
     const targetBtn1 = document.getElementById('targetBtn1');
     const targetBtn2 = document.getElementById('targetBtn2');
@@ -300,6 +315,15 @@
     const quizFeedback = document.getElementById('quizFeedback');
     const quizTimerText = document.getElementById('quizTimerText');
     const quizProgressBar = document.getElementById('quizProgressBar');
+
+    // Elemen Modal Had Simpanan
+    const limitModal = document.getElementById('limitModal');
+    const closeLimitModalBtn = document.getElementById('closeLimitModalBtn');
+    if (closeLimitModalBtn) {
+      closeLimitModalBtn.onclick = () => {
+        limitModal.style.display = 'none';
+      };
+    }
 
     let audioCtx = null;
     function initAudio() {
@@ -374,19 +398,39 @@
 
         if (!response.ok) throw new Error('Respons rangkaian gagal');
         const data = await response.json();
+        rawLeaderboardData = data || [];
 
-        if (!data || !data.length) {
+        if (!rawLeaderboardData || !rawLeaderboardData.length) {
           leaderboardList.innerHTML = '<li class="text-center text-slate-500 italic py-2">Belum ada rekod pemain dalam pangkalan data.</li>';
           topScoreText.textContent = '0';
           return;
         }
 
-        topScoreText.textContent = data[0].score || 0;
+        // Tapis supaya no. pekerja yang sama hanya memaparkan markah TERTINGGI sahaja[cite: 4]
+        const bestScoresMap = new Map();
+        rawLeaderboardData.forEach(item => {
+          const id = String(item.name || '').trim();
+          const curScore = Number(item.score);
+
+          if (!bestScoresMap.has(id)) {
+            bestScoresMap.set(id, item);
+          } else {
+            const prevScore = Number(bestScoresMap.get(id).score);
+            if (curScore > prevScore) {
+              bestScoresMap.set(id, item);
+            }
+          }
+        });
+
+        // Susun daripada markah tertinggi ke terendah
+        const uniqueRankedList = Array.from(bestScoresMap.values()).sort((a, b) => Number(b.score) - Number(a.score));
+
+        topScoreText.textContent = uniqueRankedList.length > 0 ? uniqueRankedList[0].score : '0';
         const badges = ['🥇', '🥈', '🥉'];
 
-        leaderboardList.innerHTML = data.slice(0, 10).map((item, idx) => {
+        leaderboardList.innerHTML = uniqueRankedList.slice(0, 10).map((item, idx) => {
           const isNegative = Number(item.score) < 0;
-          // Markah negatif dipaparkan simbol ❌, positif/sifar dipaparkan pingat atau giliran kedudukan
+          // Markah negatif dipaparkan simbol ❌, positif/sifar dipaparkan pingat (1-3) atau giliran kedudukan[cite: 3]
           const rankDisplay = isNegative ? '❌' : (badges[idx] || '#' + (idx + 1));
 
           return `
@@ -418,6 +462,17 @@
     async function submitScoreToSheet() {
       const rawName = playerNameInput.value.trim();
       const name = rawName.length > 0 ? rawName : 'Pemain Anon';
+
+      // Semak bilangan kali no. pekerja telah disimpan dalam pangkalan data
+      const existingPlays = rawLeaderboardData.filter(item => String(item.name || '').trim() === name).length;
+
+      // Sekiranya telah mencecah 5 kali, paparkan pop-up amaran dan halang simpanan ke-6
+      if (existingPlays >= 5) {
+        limitModal.style.display = 'flex';
+        saveStatusMsg.textContent = "Had 5 kali cubaan telah dipenuhi.";
+        saveStatusMsg.className = "text-[10px] text-rose-400 font-semibold";
+        return;
+      }
 
       saveScoreBtn.disabled = true;
       saveBtnText.textContent = "...";
@@ -562,7 +617,6 @@
 
       quizModal.style.display = 'flex';
 
-      // Kiraan 15 saat kuiz
       quizTimer = setInterval(() => {
         quizTimeLeft--;
         quizTimerText.textContent = `${quizTimeLeft}s`;
@@ -732,6 +786,7 @@
       saveStatusMsg.textContent = '';
       frenzyBadge.classList.add('hidden');
       quizModal.style.display = 'none';
+      limitModal.style.display = 'none';
       targetBtn1.classList.remove('target-fast');
       targetBtn2.classList.remove('target-fast');
 
@@ -754,6 +809,7 @@
       clearInterval(quizTimer);
 
       quizModal.style.display = 'none';
+      limitModal.style.display = 'none';
       frenzyBadge.classList.add('hidden');
       targetBtn1.classList.remove('target-fast');
       targetBtn2.classList.remove('target-fast');
