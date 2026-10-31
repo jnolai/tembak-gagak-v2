@@ -26,9 +26,11 @@
     }
     .target-flying {
       animation: flapWing 0.4s infinite ease-in-out;
+      will-change: transform;
     }
     .target-fast {
       animation: flapWing 0.2s infinite ease-in-out !important;
+      will-change: transform;
     }
     @keyframes floatUp {
       0% { opacity: 1; transform: translateY(0) scale(1); }
@@ -37,6 +39,7 @@
     .hit-popup {
       animation: floatUp 0.6s ease-out forwards;
       pointer-events: none;
+      will-change: transform, opacity;
     }
   </style>
 </head>
@@ -54,7 +57,7 @@
   <section class="w-full max-w-xl bg-slate-900/90 border border-slate-800 rounded-2xl p-2.5 sm:p-3 mb-2 flex items-center justify-around shadow-lg shrink-0">
     <div class="text-center min-w-[70px]">
       <span class="text-[10px] sm:text-xs uppercase tracking-widest text-slate-400 font-bold block">Masa</span>
-      <span id="timerText" class="text-xl sm:text-2xl md:text-3xl font-black text-rose-400 font-mono transition-all">60s</span>
+      <span id="timerText" class="text-xl sm:text-2xl md:text-3xl font-black text-rose-400 font-mono transition-colors">60s</span>
     </div>
     <div class="h-7 w-px bg-slate-800"></div>
     <div class="text-center min-w-[70px]">
@@ -79,17 +82,17 @@
     </div>
 
     <!-- Sasaran 1 -->
-    <button id="targetBtn1" type="button" class="absolute hidden text-4xl sm:text-5xl transition-all duration-75 active:scale-75 focus:outline-none target-flying select-none z-10" aria-label="Sasaran 1">
+    <button id="targetBtn1" type="button" class="absolute hidden text-4xl sm:text-5xl transition-transform duration-75 active:scale-75 focus:outline-none target-flying select-none z-10" aria-label="Sasaran 1">
       🐦‍⬛
     </button>
 
     <!-- Sasaran 2 -->
-    <button id="targetBtn2" type="button" class="absolute hidden text-4xl sm:text-5xl transition-all duration-75 active:scale-75 focus:outline-none target-flying select-none z-10" aria-label="Sasaran 2">
+    <button id="targetBtn2" type="button" class="absolute hidden text-4xl sm:text-5xl transition-transform duration-75 active:scale-75 focus:outline-none target-flying select-none z-10" aria-label="Sasaran 2">
       🕊️
     </button>
 
     <!-- Amaran Pecutan 10 Saat Terakhir -->
-    <div id="frenzyBadge" class="absolute top-2 left-1/2 -translate-x-1/2 bg-rose-600/90 border border-rose-400 text-white font-black text-[10px] sm:text-xs px-3 py-0.5 rounded-full uppercase tracking-wider hidden animate-pulse shadow-lg z-10 whitespace-nowrap">
+    <div id="frenzyBadge" class="absolute top-2 left-1/2 -translate-x-1/2 bg-rose-600/90 border border-rose-400 text-white font-black text-[10px] sm:text-xs px-3 py-0.5 rounded-full uppercase tracking-wider hidden shadow-lg z-10 whitespace-nowrap">
       ⚠️ KECEMASAN: 10S TERAKHIR!
     </div>
 
@@ -99,13 +102,11 @@
       <h2 class="text-base sm:text-xl font-black text-amber-400 mb-1 tracking-wide">OPS BELUM BERMULA</h2>
       <p class="text-xs text-slate-300 max-w-xs mb-3 font-medium">Permainan ini dikunci oleh pihak pentadbir sehingga waktu rasmi pelancaran.</p>
       
-      <!-- Paparan Tarikh Waktu Buka -->
       <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 mb-3 w-full max-w-xs">
         <span class="text-[10px] uppercase text-slate-400 font-bold block">Waktu Mula Ditetapkan</span>
         <span id="lockTargetTimeText" class="text-xs sm:text-sm font-bold text-slate-100 font-mono">-</span>
       </div>
 
-      <!-- Kiraan Detik (Countdown) -->
       <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-2 w-full max-w-xs">
         <span class="text-[10px] uppercase text-amber-400 font-bold block mb-1">Akan Dibuka Dalam Masa</span>
         <span id="lockCountdownText" class="text-xl sm:text-2xl font-black text-amber-400 font-mono tracking-wider">00:00:00</span>
@@ -199,7 +200,6 @@
         </span>
       </div>
 
-      <!-- Bar Kemajuan Masa Kuiz -->
       <div class="w-full bg-slate-800 rounded-full h-1.5 mb-3 overflow-hidden">
         <div id="quizProgressBar" class="bg-amber-400 h-full w-full transition-all duration-1000 ease-linear"></div>
       </div>
@@ -212,13 +212,13 @@
     </div>
   </div>
 
-  <!-- MODAL HAD MAKSIMUM SIMPAN (5 KALI) -->
+  <!-- MODAL HAD MAKSIMUM SIMPAN -->
   <div id="limitModal" style="display: none;" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md items-center justify-center p-4 z-[10000]">
     <div class="w-full max-w-sm bg-slate-900 border-2 border-rose-500 rounded-2xl p-5 shadow-2xl relative text-center">
       <div class="text-4xl mb-2">🛑</div>
       <h3 class="text-base font-black text-rose-400 mb-2">HAD REKOD TERCAPAI</h3>
       <p class="text-xs text-slate-200 mb-5 leading-relaxed font-medium">
-        Had rekod markah permainan anda telah mencapai maksimum (5 kali). Terima Kasih kerana bermain Tembak Gagak.
+        Had rekod markah permainan anda telah mencapai maksimum (5 kali). Terima kasih kerana bermain Tembak Gagak.
       </p>
       <button id="closeLimitModalBtn" type="button" class="w-full bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-100 font-bold py-2.5 px-4 rounded-xl border border-slate-700 hover:border-slate-500 transition text-xs cursor-pointer">
         Tutup
@@ -229,13 +229,10 @@
   <script>
     // =========================================================================
     // ⚙️ TETAPAN PENTADBIR (ADMIN CONFIG)
-    // Sila tukar tarikh & masa di bawah mengikut waktu rasmi pembukaan permainan.
-    // Format: "YYYY-MM-DDTHH:mm:ss" (Contoh: "2026-10-25T09:00:00")
     // =========================================================================
     const ADMIN_START_TIME = new Date("2026-10-25T09:40:00").getTime();
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxisPL5gkx98dVYXRbTq--BUXjo_RuIBWxBvLkyPnj5VGARKnqVnkzyeU056wnqXAYryA/exec";
 
-    // Bank Soalan lengkap berdasarkan PDF "BANK SOALAN E-GAME" (35 Soalan)
     const KL_QUESTIONS = [
       { q: "1. Apakah hasil terbesar dalam DBKL?", options: ["Caj pembangunan", "Kadar taksiran", "Lesen perniagaan", "Sewaan harta datuk bandar"], ans: 1 },
       { q: "2. Siapakah nama Datuk Bandar Kuala Lumpur yang ke 15?", options: ["Datuk Seri Fadlun Mak Ujud", "Datuk Seri Mahadi Che Ngah", "Datuk Haji Kamarulzaman Mat Salleh", "Datuk Seri Dr. Maimunah Mohd Sharif"], ans: 3 },
@@ -282,7 +279,7 @@
       BONUS_POINTS: 20,
       QUIZ_PENALTY: 5,
       CROWS_PER_QUIZ: 3,
-      FETCH_TIMEOUT_MS: 9000,
+      FETCH_TIMEOUT_MS: 8000,
       TARGET_TYPES: {
         CROW: { key: 'CROW', emoji: '🐦‍⬛', points: 10, color: 'text-emerald-400' },
         BIRD: { key: 'BIRD', emoji: '🕊️', points: -10, color: 'text-rose-400' },
@@ -304,6 +301,7 @@
     let quizTimeLeft = CONFIG.QUIZ_TIME;
     let isPlaying = false;
     let isPausedForQuiz = false;
+    let isSubmitting = false;
     let currentSpeed = CONFIG.NORMAL_SPEED_MS;
     let crowStreak = 0;
 
@@ -332,14 +330,12 @@
     const leaderboardList = document.getElementById('leaderboardList');
     const refreshBoardBtn = document.getElementById('refreshBoardBtn');
 
-    // Kawalan Kunci & Had
     const lockedScreen = document.getElementById('lockedScreen');
     const lockTargetTimeText = document.getElementById('lockTargetTimeText');
     const lockCountdownText = document.getElementById('lockCountdownText');
     const limitModal = document.getElementById('limitModal');
     const closeLimitModalBtn = document.getElementById('closeLimitModalBtn');
 
-    // Elemen Kuiz
     const quizModal = document.getElementById('quizModal');
     const quizQuestion = document.getElementById('quizQuestion');
     const quizOptions = document.getElementById('quizOptions');
@@ -446,6 +442,12 @@
       } catch (e) {}
     }
 
+    // Jitter untuk mengelakkan lonjakan trafik secara serentak
+    function fetchBoardWithJitter() {
+      const delay = Math.floor(Math.random() * 2000);
+      setTimeout(fetchTop10Leaderboard, delay);
+    }
+
     async function fetchTop10Leaderboard() {
       if (isFetchingBoard) return;
       isFetchingBoard = true;
@@ -464,7 +466,7 @@
 
         if (!response.ok) throw new Error('Respons rangkaian gagal');
         const data = await response.json();
-        rawLeaderboardData = data || [];
+        rawLeaderboardData = Array.isArray(data) ? data : [];
 
         if (!rawLeaderboardData.length) {
           leaderboardList.innerHTML = '<li class="text-center text-slate-500 italic py-2">Belum ada rekod pemain dalam pangkalan data.</li>';
@@ -472,7 +474,6 @@
           return;
         }
 
-        // Tapisan: No. Pekerja unik mengambil markah TERTINGGI
         const bestScoresMap = new Map();
         rawLeaderboardData.forEach(item => {
           const id = String(item.name || '').trim();
@@ -525,12 +526,12 @@
     }
 
     async function submitScoreToSheet() {
+      if (isSubmitting) return;
+
       const rawName = playerNameInput.value.trim();
       const name = rawName.length > 0 ? rawName : 'Pemain Anon';
 
-      // Semakan: Had simpanan maksimum 5 kali bagi No. Pekerja yang sama
       const existingPlays = rawLeaderboardData.filter(item => String(item.name || '').trim() === name).length;
-
       if (existingPlays >= 5) {
         limitModal.style.display = 'flex';
         saveStatusMsg.textContent = "Had 5 kali cubaan telah dipenuhi.";
@@ -538,6 +539,7 @@
         return;
       }
 
+      isSubmitting = true;
       saveScoreBtn.disabled = true;
       saveBtnText.textContent = "...";
       saveStatusMsg.textContent = "Menghantar markah ke sistem pusat...";
@@ -552,7 +554,7 @@
           mode: 'no-cors',
           signal: controller.signal,
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ name: name, score: score })
+          body: JSON.stringify({ name: name, score: score, timestamp: new Date().toISOString() })
         });
         clearTimeout(timeoutId);
 
@@ -565,8 +567,9 @@
           saveScoreBtn.disabled = false;
           saveBtnText.textContent = "Simpan";
           saveStatusMsg.textContent = "";
-          fetchTop10Leaderboard();
-        }, 1100);
+          isSubmitting = false;
+          fetchBoardWithJitter();
+        }, 1200);
 
       } catch (err) {
         clearTimeout(timeoutId);
@@ -574,6 +577,7 @@
         saveStatusMsg.className = "text-[10px] text-rose-400 font-semibold";
         saveScoreBtn.disabled = false;
         saveBtnText.textContent = "Simpan";
+        isSubmitting = false;
       }
     }
 
@@ -788,7 +792,7 @@
         frenzyBadge.classList.remove('hidden');
         targetBtn1.classList.add('target-fast');
         targetBtn2.classList.add('target-fast');
-        timerText.className = "text-2xl sm:text-3xl md:text-4xl font-black text-rose-500 font-mono animate-ping transition-all";
+        timerText.className = "text-2xl sm:text-3xl md:text-4xl font-black text-rose-500 font-mono transition-transform scale-110";
       }
 
       if (timeLeft <= 0) {
@@ -847,7 +851,7 @@
       updateCrowStreakDisplay();
       scoreText.textContent = '0';
       timerText.textContent = `${timeLeft}s`;
-      timerText.className = "text-xl sm:text-2xl md:text-3xl font-black text-rose-400 font-mono transition-all";
+      timerText.className = "text-xl sm:text-2xl md:text-3xl font-black text-rose-400 font-mono transition-colors";
       saveStatusMsg.textContent = '';
       frenzyBadge.classList.add('hidden');
       quizModal.style.display = 'none';
@@ -916,7 +920,10 @@
 
     lockCheckInterval = setInterval(checkGameAccessibility, 1000);
     checkGameAccessibility();
-    fetchTop10Leaderboard();
+
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchBoardWithJitter();
+    });
   </script>
 </body>
 </html>
