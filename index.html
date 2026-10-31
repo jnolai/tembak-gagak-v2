@@ -148,7 +148,6 @@
             pattern="[0-9]*" 
             maxlength="16" 
             placeholder="No.Pekerja..." 
-            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
             class="bg-slate-800 border border-slate-700 text-xs sm:text-sm rounded-xl px-3 py-2.5 sm:py-3 flex-1 text-center font-bold focus:outline-none focus:border-amber-400 text-slate-100 placeholder-slate-500" 
           />
           <button id="saveScoreBtn" type="button" class="bg-emerald-500 hover:bg-emerald-400 disabled:bg-slate-700 text-slate-950 font-bold px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl transition shadow text-xs sm:text-sm flex items-center justify-center cursor-pointer">
@@ -208,9 +207,7 @@
       <h3 id="quizQuestion" class="text-sm font-bold text-slate-100 mb-4 px-1 leading-snug">
         Memuatkan soalan...
       </h3>
-      <div id="quizOptions" class="grid grid-cols-1 gap-2.5 mb-2">
-        <!-- Pilihan butang -->
-      </div>
+      <div id="quizOptions" class="grid grid-cols-1 gap-2.5 mb-2"></div>
       <p id="quizFeedback" class="text-xs font-bold min-h-[18px] mt-2"></p>
     </div>
   </div>
@@ -221,7 +218,7 @@
       <div class="text-4xl mb-2">🛑</div>
       <h3 class="text-base font-black text-rose-400 mb-2">HAD REKOD TERCAPAI</h3>
       <p class="text-xs text-slate-200 mb-5 leading-relaxed font-medium">
-        Had rekod markah permainan anda telah mencapai maksimum, Terima Kasih kerana bermain Tembak Gagak.
+        Had rekod markah permainan anda telah mencapai maksimum (5 kali). Terima Kasih kerana bermain Tembak Gagak.
       </p>
       <button id="closeLimitModalBtn" type="button" class="w-full bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-100 font-bold py-2.5 px-4 rounded-xl border border-slate-700 hover:border-slate-500 transition text-xs cursor-pointer">
         Tutup
@@ -236,10 +233,9 @@
     // Format: "YYYY-MM-DDTHH:mm:ss" (Contoh: "2026-10-25T09:00:00")
     // =========================================================================
     const ADMIN_START_TIME = new Date("2026-10-25T09:40:00").getTime();
-
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxisPL5gkx98dVYXRbTq--BUXjo_RuIBWxBvLkyPnj5VGARKnqVnkzyeU056wnqXAYryA/exec";
 
-    // Bank Soalan lengkap berdasarkan PDF "BANK SOALAN E-GAME" (35 Soalan)[cite: 1, 2]
+    // Bank Soalan lengkap berdasarkan PDF "BANK SOALAN E-GAME" (35 Soalan)
     const KL_QUESTIONS = [
       { q: "1. Apakah hasil terbesar dalam DBKL?", options: ["Caj pembangunan", "Kadar taksiran", "Lesen perniagaan", "Sewaan harta datuk bandar"], ans: 1 },
       { q: "2. Siapakah nama Datuk Bandar Kuala Lumpur yang ke 15?", options: ["Datuk Seri Fadlun Mak Ujud", "Datuk Seri Mahadi Che Ngah", "Datuk Haji Kamarulzaman Mat Salleh", "Datuk Seri Dr. Maimunah Mohd Sharif"], ans: 3 },
@@ -251,7 +247,7 @@
       { q: "8. Berapakah bilangan parlimen di bawah pentadbiran DBKL?", options: ["10", "11", "12", "13"], ans: 1 },
       { q: "9. Kajang merupakan salah satu parlimen di bawah pentadbiran DBKL. Betul atau salah?", options: ["Betul", "Salah"], ans: 1 },
       { q: "10. Berapa kalikah cukai taksiran perlu dibayar dalam setahun?", options: ["Setahun sekali", "Dua kali setahun", "Tiga kali setahun", "Empat kali setahun"], ans: 1 },
-      { q: "11. Berakah jumlah jabatan yang terdapat di DBKL?", options: ["22", "24", "26", "28"], ans: 2 },
+      { q: "11. Berapakah jumlah jabatan yang terdapat di DBKL?", options: ["22", "24", "26", "28"], ans: 2 },
       { q: "12. Bagaimanakah cara memohon rumah PPR DBKL?", options: ["Melalui sistem ePerumahan DBKL", "Melalui sistem eRakyat DBKL", "Melalui sistem eRahmah DBKL", "Melalui sistem eKota DBKL"], ans: 0 },
       { q: "13. Di manakah orang awam boleh mendapatkan maklumat tender terkini DBKL?", options: ["Melalui sistem e-Tender DBKL", "Melalui sistem e-Maklumat DBKL", "Melalui sistem e-Perolehan dan Pengurusan Projek DBKL", "Melalui sistem e-Kontrak DBKL"], ans: 2 },
       { q: "14. Di submodul DCoS manakah penyediaan Borang Tempahan / Purchase Order boleh dilaksanakan?", options: ["HCM", "EBS", "DREAMS", "Hyperion"], ans: 1 },
@@ -264,7 +260,7 @@
       { q: "21. Jabatan manakah yang melapor terus kepada Datuk Bandar Kuala Lumpur?", options: ["Jabatan Integriti", "Jabatan Kewangan", "Jabatan Penguatkuasaan", "Jabatan Pengurusan Sumber Manusia"], ans: 0 },
       { q: "22. Siapakah Datuk Bandar kedua yang mengetuai DBKL?", options: ["YBhg. Dato' Dr. Mazlan Ahmad", "YBhg. Tan Sri Dato' Lokman Yusof", "YBhg. Tan Sri Yaakob Abdul Latiff", "YBhg. Datuk Haji Mohmad Shaid Mohd Taufek"], ans: 2 },
       { q: "23. Berapakah keluasan Kuala Lumpur?", options: ["234km²", "243km²", "254km²", "299km²"], ans: 1 },
-      { q: "24. Yang manakah merupakah sumber perundangan DBKL?", options: ["Akta Bandaraya Kuala Lumpur 1971", "Akta Bandaraya Kuala Lumpur 1972", "Akta Bandaraya Kuala Lumpur 1973", "Akta Bandaraya Kuala Lumpur 1974"], ans: 0 },
+      { q: "24. Yang manakah merupakan sumber perundangan DBKL?", options: ["Akta Bandaraya Kuala Lumpur 1971", "Akta Bandaraya Kuala Lumpur 1972", "Akta Bandaraya Kuala Lumpur 1973", "Akta Bandaraya Kuala Lumpur 1974"], ans: 0 },
       { q: "25. Jabatan Ukur Bahan (JUB) terletak di bawah sektor", options: ["Pengurusan", "Pengurusan Projek", "Perancangan", "Pembangunan Sosio Ekonomi"], ans: 1 },
       { q: "26. Belanja Elaun Lebih Masa diperuntukkan dalam Peruntukan", options: ["Mengurus", "Pembangunan", "Kerajaan", "Swasta"], ans: 0 },
       { q: "27. Bayaran Cagaran boleh diterima dalam portal DBKLBayar", options: ["Betul", "Salah"], ans: 0 },
@@ -286,6 +282,7 @@
       BONUS_POINTS: 20,
       QUIZ_PENALTY: 5,
       CROWS_PER_QUIZ: 3,
+      FETCH_TIMEOUT_MS: 9000,
       TARGET_TYPES: {
         CROW: { key: 'CROW', emoji: '🐦‍⬛', points: 10, color: 'text-emerald-400' },
         BIRD: { key: 'BIRD', emoji: '🕊️', points: -10, color: 'text-rose-400' },
@@ -313,6 +310,7 @@
     let slot1Data = null;
     let slot2Data = null;
     let rawLeaderboardData = [];
+    let isFetchingBoard = false;
 
     const targetBtn1 = document.getElementById('targetBtn1');
     const targetBtn2 = document.getElementById('targetBtn2');
@@ -334,7 +332,7 @@
     const leaderboardList = document.getElementById('leaderboardList');
     const refreshBoardBtn = document.getElementById('refreshBoardBtn');
 
-    // Elemen Kawalan Waktu & Had
+    // Kawalan Kunci & Had
     const lockedScreen = document.getElementById('lockedScreen');
     const lockTargetTimeText = document.getElementById('lockTargetTimeText');
     const lockCountdownText = document.getElementById('lockCountdownText');
@@ -355,10 +353,9 @@
       };
     }
 
-    // Semakan Tarikh & Masa Mula Ditetapkan Admin
     let lockCheckInterval = null;
     function checkGameAccessibility() {
-      const now = new Date().getTime();
+      const now = Date.now();
       const difference = ADMIN_START_TIME - now;
 
       if (lockTargetTimeText) {
@@ -450,25 +447,32 @@
     }
 
     async function fetchTop10Leaderboard() {
+      if (isFetchingBoard) return;
+      isFetchingBoard = true;
       leaderboardList.innerHTML = '<li class="text-center text-slate-500 italic py-2">Mengambil senarai 10 terbaik...</li>';
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), CONFIG.FETCH_TIMEOUT_MS);
 
       try {
         const response = await fetch(GOOGLE_SCRIPT_URL, {
           method: 'GET',
-          redirect: 'follow'
+          redirect: 'follow',
+          signal: controller.signal
         });
+        clearTimeout(timeoutId);
 
         if (!response.ok) throw new Error('Respons rangkaian gagal');
         const data = await response.json();
         rawLeaderboardData = data || [];
 
-        if (!rawLeaderboardData || !rawLeaderboardData.length) {
+        if (!rawLeaderboardData.length) {
           leaderboardList.innerHTML = '<li class="text-center text-slate-500 italic py-2">Belum ada rekod pemain dalam pangkalan data.</li>';
           topScoreText.textContent = '0';
           return;
         }
 
-        // Tapisan: No. Pekerja yang sama hanya mengambil markah TERTINGGI[cite: 4]
+        // Tapisan: No. Pekerja unik mengambil markah TERTINGGI
         const bestScoresMap = new Map();
         rawLeaderboardData.forEach(item => {
           const id = String(item.name || '').trim();
@@ -485,13 +489,11 @@
         });
 
         const uniqueRankedList = Array.from(bestScoresMap.values()).sort((a, b) => Number(b.score) - Number(a.score));
-
         topScoreText.textContent = uniqueRankedList.length > 0 ? uniqueRankedList[0].score : '0';
         const badges = ['🥇', '🥈', '🥉'];
 
         leaderboardList.innerHTML = uniqueRankedList.slice(0, 10).map((item, idx) => {
           const isNegative = Number(item.score) < 0;
-          // Markah negatif dipaparkan ❌[cite: 3]
           const rankDisplay = isNegative ? '❌' : (badges[idx] || '#' + (idx + 1));
 
           return `
@@ -515,8 +517,10 @@
         }).join('');
 
       } catch (err) {
-        console.error("Ralat Leaderboard:", err);
+        clearTimeout(timeoutId);
         leaderboardList.innerHTML = '<li class="text-center text-rose-400 py-2">Gagal berhubung dengan pangkalan data rekod.</li>';
+      } finally {
+        isFetchingBoard = false;
       }
     }
 
@@ -539,13 +543,18 @@
       saveStatusMsg.textContent = "Menghantar markah ke sistem pusat...";
       saveStatusMsg.className = "text-[10px] text-amber-400 font-semibold";
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), CONFIG.FETCH_TIMEOUT_MS);
+
       try {
         await fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
+          signal: controller.signal,
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ name: name, score: score })
         });
+        clearTimeout(timeoutId);
 
         saveStatusMsg.textContent = "Tersimpan dalam sistem rekod!";
         saveStatusMsg.className = "text-[10px] text-emerald-400 font-semibold";
@@ -560,8 +569,8 @@
         }, 1100);
 
       } catch (err) {
-        console.error("Ralat Simpan:", err);
-        saveStatusMsg.textContent = "Ralat semasa menyimpan markah.";
+        clearTimeout(timeoutId);
+        saveStatusMsg.textContent = "Ralat talian. Sila cuba tekan Simpan lagi.";
         saveStatusMsg.className = "text-[10px] text-rose-400 font-semibold";
         saveScoreBtn.disabled = false;
         saveBtnText.textContent = "Simpan";
@@ -620,7 +629,6 @@
 
       targetBtn1.style.left = `${coords.x1}px`;
       targetBtn1.style.top = `${coords.y1}px`;
-
       targetBtn2.style.left = `${coords.x2}px`;
       targetBtn2.style.top = `${coords.y2}px`;
     }
@@ -739,7 +747,6 @@
 
         score += CONFIG.BONUS_POINTS;
         scoreText.textContent = score;
-
         spawnHitPopup(arena.clientWidth / 2 - 20, arena.clientHeight / 2 - 20, CONFIG.BONUS_POINTS, 'text-emerald-400');
       } else {
         clickedBtn.className = "w-full text-left bg-rose-600 border border-rose-400 text-white text-xs py-2.5 px-3 rounded-xl font-bold transition";
@@ -749,7 +756,6 @@
 
         score -= CONFIG.QUIZ_PENALTY;
         scoreText.textContent = score;
-
         spawnHitPopup(arena.clientWidth / 2 - 20, arena.clientHeight / 2 - 20, -CONFIG.QUIZ_PENALTY, 'text-rose-500');
       }
 
@@ -804,7 +810,6 @@
       if (!targetData) return;
 
       playTone(targetData.key);
-
       score += targetData.points;
       scoreText.textContent = score;
 
@@ -882,8 +887,16 @@
       setTimeout(() => playerNameInput.focus(), 200);
     }
 
-    targetBtn1.addEventListener('pointerdown', (e) => handleShot(1, e));
-    targetBtn2.addEventListener('pointerdown', (e) => handleShot(2, e));
+    targetBtn1.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      handleShot(1, e);
+    });
+
+    targetBtn2.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      handleShot(2, e);
+    });
+
     startGameBtn.addEventListener('click', startGame);
     playAgainBtn.addEventListener('click', startGame);
     saveScoreBtn.addEventListener('click', submitScoreToSheet);
@@ -901,7 +914,6 @@
       if (e.target === arena) initAudio();
     });
 
-    // Mulakan semakan waktu & senarai rekod
     lockCheckInterval = setInterval(checkGameAccessibility, 1000);
     checkGameAccessibility();
     fetchTop10Leaderboard();
